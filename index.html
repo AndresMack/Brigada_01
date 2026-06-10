@@ -3,501 +3,700 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brigada de Cocina - Clase 16</title>
+  <title>Brigada de Cocina - Control de Tiempos, Dependencias y Gramajes</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji";
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f5f5f7;
+      color: #1d1d1f;
     }
-    /* Estilo de scroll minimalista */
+    /* Estilo de scroll minimalista tipo iOS */
     ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 8px;
+      height: 8px;
     }
     ::-webkit-scrollbar-track {
-      background: #f1f5f9;
+      background: #f5f5f7;
     }
     ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 3px;
+      background: #d2d2d7;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #86868b;
     }
   </style>
 </head>
-<body class="bg-[#f5f5f7] text-[#1d1d1f] min-h-screen flex flex-col antialiased">
+<body class="min-h-screen flex flex-col antialiased">
 
-  <!-- Header Estilo Apple -->
+  <!-- Header Estilo Apple Premium -->
   <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-[#e5e5e7] px-6 py-4">
-    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-3">
-        <div class="p-2.5 bg-blue-600 rounded-xl text-white shadow-sm shadow-blue-200">
+        <div class="p-2.5 bg-[#0071e3] rounded-xl text-white shadow-sm">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
         <div>
-          <h1 class="text-xl font-bold tracking-tight text-[#1d1d1f]">Plan de Trabajo - Clase 16</h1>
-          <p class="text-xs text-[#86868b]">Carnes de Res II – Segunda Categoría</p>
+          <h1 class="text-xl font-bold tracking-tight text-[#1d1d1f]">Panel de Tiempos, Dependencias y Gramajes</h1>
+          <p class="text-xs text-[#86868b]">Examen Final 12 de Junio • 1 Porción Individual de Cada Plato</p>
         </div>
       </div>
-
-      <!-- Temporizador Integrado -->
+      
+      <!-- Temporizador integrado para el examen de 60 minutos -->
       <div class="flex items-center gap-3 bg-[#f5f5f7] px-4 py-2 rounded-2xl border border-[#e5e5e7]">
-        <div class="text-center">
-          <span class="text-xs text-[#86868b] block font-medium uppercase tracking-wider">Cronómetro</span>
-          <span id="timer-display" class="text-xl font-bold font-mono text-[#1d1d1f]">60:00</span>
+        <div class="text-right">
+          <span class="text-[10px] text-[#86868b] block font-semibold uppercase tracking-wider">Cronómetro de Examen</span>
+          <span id="timer-display" class="text-lg font-bold font-mono text-[#1d1d1f]">60:00</span>
         </div>
-        <div class="flex gap-1.5 ml-2">
-          <button id="btn-timer-toggle" class="p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors" title="Iniciar/Pausar">
-            <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-            </svg>
-            <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </button>
-          <button id="btn-timer-reset" class="p-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg transition-colors" title="Reiniciar">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 15.19M9 15.5l.01-.011" />
-            </svg>
-          </button>
-        </div>
+        <button id="btn-timer-toggle" class="p-2 bg-[#0071e3] hover:bg-[#0077ed] text-white rounded-xl transition-colors">
+          <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+          </svg>
+          <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 9v6m4-6v6" />
+          </svg>
+        </button>
       </div>
     </div>
   </header>
 
   <!-- Contenedor Principal -->
-  <main class="flex-grow max-w-4xl w-full mx-auto p-4 sm:p-6">
+  <main class="flex-grow max-w-5xl w-full mx-auto p-4 md:p-6 space-y-6">
 
-    <!-- Mensaje del sistema personalizado para alertas de cocina -->
-    <div id="custom-alert" class="hidden fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-red-600 text-white font-semibold px-6 py-4 rounded-2xl shadow-xl flex items-center gap-3 transition-all duration-300">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-      </svg>
-      <span id="alert-text">¡Tiempo agotado! Brigada, hora de montar platos.</span>
-      <button onclick="closeAlert()" class="text-white hover:text-red-200 ml-4 font-bold">×</button>
+    <!-- Plan de Contingencia por Accidente -->
+    <div class="bg-amber-50 border border-amber-200 rounded-3xl p-5 flex items-start gap-4 shadow-sm">
+      <div class="p-2.5 bg-amber-100 rounded-2xl text-amber-800">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <div>
+        <h3 class="font-bold text-amber-900 text-sm md:text-base">Manejo de Limitación de Santiago</h3>
+        <p class="text-xs md:text-sm text-amber-800 mt-1 leading-relaxed">
+          Santiago monitorea los tiempos de entrega, dirige el emplatado y asume la elaboración segura de las salsas de manera técnica. Se evita cualquier manipulación de cuchillos o exposición a salpicaduras y fuegos vivos de alta temperatura.
+        </p>
+      </div>
     </div>
 
-    <!-- Menú de Pestañas (Estilo Apple, redondeado y centrado) -->
-    <div class="bg-white p-1.5 rounded-2xl border border-[#e5e5e7] flex gap-1 mb-6 overflow-x-auto shadow-sm">
-      <button onclick="switchTab('angela')" id="tab-angela" class="tab-btn flex-1 py-3 px-3 rounded-xl text-sm font-semibold transition-all duration-200 text-center flex items-center justify-center gap-1.5 whitespace-nowrap bg-blue-600 text-white shadow-sm">
-        <span class="w-2 h-2 rounded-full bg-orange-400"></span> Ángela
+    <!-- TARJETA DE GRAMAJES DE PUESTA A PUNTO (MISE EN PLACE GENERAL) -->
+    <div class="bg-white rounded-3xl p-6 border border-[#e5e5e7] shadow-sm space-y-4">
+      <div class="border-b border-gray-100 pb-4">
+        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">PLAN DE BÁSCULA</span>
+        <h2 class="text-lg font-bold mt-2 text-[#1d1d1f]">Gramajes Técnicos por Plato Fuerte (1 Porción Individual)</h2>
+        <p class="text-xs text-[#86868b] mt-0.5">La estandarización estricta evita el desperdicio y asegura tiempos de cocción parejos.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Plato 1: Roulade de Ave -->
+        <div class="bg-[#f5f5f7] p-5 rounded-2xl space-y-3">
+          <h3 class="font-bold text-sm text-[#0071e3] border-b border-gray-200 pb-1.5 flex justify-between">
+            <span>🍗 Roulade de Ave y Guarnición</span>
+            <span class="text-xs font-medium text-[#86868b]">1 Plato</span>
+          </h3>
+          <ul class="text-xs space-y-2 text-[#515154]">
+            <li class="flex justify-between"><span>• Pierna pernil de pollo (deshuesada)</span> <strong class="font-semibold text-[#1d1d1f]">150 g</strong></li>
+            <li class="flex justify-between"><span>• Champiñones frescos (para farsa)</span> <strong class="font-semibold text-[#1d1d1f]">40 g</strong></li>
+            <li class="flex justify-between"><span>• Cebolla cabezona blanca (en brunoise)</span> <strong class="font-semibold text-[#1d1d1f]">30 g</strong></li>
+            <li class="flex justify-between"><span>• Vino blanco seco (desglase y salsa)</span> <strong class="font-semibold text-[#1d1d1f]">40 ml</strong></li>
+            <li class="flex justify-between"><span>• Cream de leche (para salsa)</span> <strong class="font-semibold text-[#1d1d1f]">50 ml</strong></li>
+            <li class="flex justify-between"><span>• Aceite de oliva extra virgen</span> <strong class="font-semibold text-[#1d1d1f]">10 ml</strong></li>
+            <li class="flex justify-between"><span>• Zanahoria baby (para glaseado)</span> <strong class="font-semibold text-[#1d1d1f]">80 g</strong></li>
+            <li class="flex justify-between"><span>• Harina pastelera (para crocante/teja)</span> <strong class="font-semibold text-[#1d1d1f]">15 g</strong></li>
+            <li class="flex justify-between"><span>• Clara de huevo (para teja)</span> <strong class="font-semibold text-[#1d1d1f]">15 g</strong></li>
+            <li class="flex justify-between"><span>• Mantequilla (para teja)</span> <strong class="font-semibold text-[#1d1d1f]">15 g</strong></li>
+            <li class="flex justify-between"><span>• Romero fresco</span> <strong class="font-semibold text-[#1d1d1f]">1 g</strong></li>
+          </ul>
+        </div>
+
+        <!-- Plato 2: Goulash de Res -->
+        <div class="bg-[#f5f5f7] p-5 rounded-2xl space-y-3">
+          <h3 class="font-bold text-sm text-[#ff453a] border-b border-gray-200 pb-1.5 flex justify-between">
+            <span>🥩 Goulash de Res y Puré de Papas</span>
+            <span class="text-xs font-medium text-[#86868b]">1 Plato</span>
+          </h3>
+          <ul class="text-xs space-y-2 text-[#515154]">
+            <li class="flex justify-between"><span>• Paleta de res (cubos de 2.5 cm)</span> <strong class="font-semibold text-[#1d1d1f]">180 g</strong></li>
+            <li class="flex justify-between"><span>• Pimentón rojo (cubos de 2.5 cm)</span> <strong class="font-semibold text-[#1d1d1f]">40 g</strong></li>
+            <li class="flex justify-between"><span>• Cebolla cabezona blanca (en cubos)</span> <strong class="font-semibold text-[#1d1d1f]">40 g</strong></li>
+            <li class="flex justify-between"><span>• Paprika dulce</span> <strong class="font-semibold text-[#1d1d1f]">4 g</strong></li>
+            <li class="flex justify-between"><span>• Fondo oscuro de res</span> <strong class="font-semibold text-[#1d1d1f]">120 ml</strong></li>
+            <li class="flex justify-between"><span>• Vinagre balsámico (adicional Santiago)</span> <strong class="font-semibold text-[#1d1d1f]">10 ml</strong></li>
+            <li class="flex justify-between"><span>• Papa pastusa (para el puré)</span> <strong class="font-semibold text-[#1d1d1f]">150 g</strong></li>
+            <li class="flex justify-between"><span>• Papa sabanera (para las croquetas)</span> <strong class="font-semibold text-[#1d1d1f]">100 g</strong></li>
+            <li class="flex justify-between"><span>• Mantequilla fría (para el puré)</span> <strong class="font-semibold text-[#1d1d1f]">35 g</strong></li>
+            <li class="flex justify-between"><span>• Leche entera tibia</span> <strong class="font-semibold text-[#1d1d1f]">40 ml</strong></li>
+            <li class="flex justify-between"><span>• Yema de huevo (para croqueta sabanera)</span> <strong class="font-semibold text-[#1d1d1f]">10 g</strong></li>
+            <li class="flex justify-between"><span>• Queso parmesano rallado</span> <strong class="font-semibold text-[#1d1d1f]">15 g</strong></li>
+            <li class="flex justify-between"><span>• Harina pastelera (para rebozar croqueta)</span> <strong class="font-semibold text-[#1d1d1f]">10 g</strong></li>
+            <li class="flex justify-between"><span>• Aceite de girasol (para freír/sellar)</span> <strong class="font-semibold text-[#1d1d1f]">150 ml</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menú de Vistas (Línea de Tiempo General vs. Tareas Individuales) -->
+    <div class="bg-[#e5e5e7] p-1 rounded-2xl flex gap-1 shadow-inner">
+      <button onclick="switchView('timeline')" id="view-timeline-btn" class="view-btn flex-1 py-3 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200 text-center bg-white text-[#1d1d1f] shadow-sm">
+        Línea de Tiempo por Bloques (Dependencias)
       </button>
-      <button onclick="switchTab('sofia')" id="tab-sofia" class="tab-btn flex-1 py-3 px-3 rounded-xl text-sm font-semibold transition-all duration-200 text-center flex items-center justify-center gap-1.5 whitespace-nowrap text-[#86868b] hover:text-[#1d1d1f] hover:bg-[#f5f5f7]">
-        <span class="w-2 h-2 rounded-full bg-pink-400"></span> Sofía
-      </button>
-      <button onclick="switchTab('santiago')" id="tab-santiago" class="tab-btn flex-1 py-3 px-3 rounded-xl text-sm font-semibold transition-all duration-200 text-center flex items-center justify-center gap-1.5 whitespace-nowrap text-[#86868b] hover:text-[#1d1d1f] hover:bg-[#f5f5f7]">
-        <span class="w-2 h-2 rounded-full bg-blue-400"></span> Santiago
-      </button>
-      <button onclick="switchTab('julian')" id="tab-julian" class="tab-btn flex-1 py-3 px-3 rounded-xl text-sm font-semibold transition-all duration-200 text-center flex items-center justify-center gap-1.5 whitespace-nowrap text-[#86868b] hover:text-[#1d1d1f] hover:bg-[#f5f5f7]">
-        <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Julián
+      <button onclick="switchView('individual')" id="view-individual-btn" class="view-btn flex-1 py-3 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200 text-center text-[#86868b] hover:text-[#1d1d1f]">
+        Roles Individuales y Checklist
       </button>
     </div>
 
-    <!-- CONTENIDOS DE LAS PESTAÑAS -->
+    <!-- ================= CONTENIDO 1: LÍNEA DE TIEMPO POR BLOQUES (SÍNCRONA) ================= -->
+    <div id="view-timeline" class="space-y-8 block">
 
-    <!-- PESTAÑA: ÁNGELA -->
-    <section id="content-angela" class="tab-content block">
-      <div class="bg-white rounded-3xl p-6 border border-[#e5e5e7] shadow-sm mb-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+      <!-- BLOQUE 1: Minutos 00 a 15 -->
+      <div class="bg-white rounded-3xl p-6 border border-[#e5e5e7] shadow-sm space-y-4">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-100 pb-4 gap-2">
           <div>
-            <span class="text-xs font-bold text-orange-600 bg-orange-50 px-3 py-1.5 rounded-full uppercase tracking-wider">Especialidad: Al Fuego - Goulash (R1) y Apoyo Spätzle</span>
-            <h2 class="text-2xl font-bold mt-2">Ángela — Goulash de Res</h2>
-            <p class="text-sm text-[#86868b] mt-0.5">Mantente atenta al fuego y concéntrate en tu preparación. Una vez que esté lista, asiste a Julián.</p>
+            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">BLOQUE 1</span>
+            <h2 class="text-xl font-bold mt-1 text-[#1d1d1f]">Minutos 00 a 15 — Puesta a Punto y Arranque Síncrono</h2>
           </div>
-          <button onclick="toggleFocusMode('angela')" class="px-4 py-2 bg-[#f5f5f7] hover:bg-[#e8e8ed] border border-[#d2d2d7] rounded-xl text-xs font-bold transition-all flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            <span id="btn-text-angela">Ver Modo Enfoque</span>
-          </button>
+          <span class="text-xs font-semibold text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-100">🔥 Sellar res e Hidratar papas</span>
         </div>
 
-        <!-- Vista Normal -->
-        <div id="normal-angela" class="space-y-4">
-          <div class="border-l-2 border-orange-500 pl-4 py-1 mb-2">
-            <h3 class="font-bold text-sm text-[#1d1d1f] uppercase tracking-wider">Lista Completa de Pasos</h3>
-          </div>
-        </div>
-
-        <!-- Vista Enfoque -->
-        <div id="focus-angela" class="hidden py-4 text-center"></div>
-      </div>
-    </section>
-
-    <!-- PESTAÑA: SOFÍA -->
-    <section id="content-sofia" class="tab-content hidden">
-      <div class="bg-white rounded-3xl p-6 border border-[#e5e5e7] shadow-sm mb-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+        <!-- Dependencia Crítica -->
+        <div class="bg-red-50 border border-red-100 rounded-2xl p-4 text-xs md:text-sm text-red-800 flex items-start gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
           <div>
-            <span class="text-xs font-bold text-pink-600 bg-pink-50 px-3 py-1.5 rounded-full uppercase tracking-wider">Especialidad: Carne de Milanesa (R2)</span>
-            <h2 class="text-2xl font-bold mt-2">Sofía — Milanesas de Muchacho</h2>
-            <p class="text-sm text-[#86868b] mt-0.5">Te encargas de todo el proceso de las milanesas, desde la limpieza de la carne hasta la fritura profunda.</p>
-          </div>
-          <button onclick="toggleFocusMode('sofia')" class="px-4 py-2 bg-[#f5f5f7] hover:bg-[#e8e8ed] border border-[#d2d2d7] rounded-xl text-xs font-bold transition-all flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            <span id="btn-text-sofia">Ver Modo Enfoque</span>
-          </button>
-        </div>
-
-        <!-- Vista Normal -->
-        <div id="normal-sofia" class="space-y-4">
-          <div class="border-l-2 border-pink-500 pl-4 py-1 mb-2">
-            <h3 class="font-bold text-sm text-[#1d1d1f] uppercase tracking-wider">Lista Completa de Pasos</h3>
+            <strong class="font-bold block">ENTREGAS CRÍTICAS PARA ESTE BLOQUE:</strong>
+            <ul class="list-disc pl-4 mt-1 space-y-1">
+              <li><strong>Santiago</strong> debe medir los líquidos exactos (40 ml de vino, 120 ml de fondo, 50 ml de crema de leche y 10 ml de balsámico) de inmediato para evitar demoras en las estaciones calientes.</li>
+              <li><strong>Julián</strong> debe entregarle el pimentón (40 g) y la cebolla (40 g) cortados en cubos medianos a <strong>Luffit</strong> exactamente al minuto 15 para iniciar la base del estofado.</li>
+              <li><strong>Sofía</strong> debe tener las ollas con agua fría y sal hirviendo con las papas (150 g pastusa, 100 g sabanera) antes del minuto 15.</li>
+            </ul>
           </div>
         </div>
 
-        <!-- Vista Enfoque -->
-        <div id="focus-sofia" class="hidden py-4 text-center"></div>
+        <!-- Tareas paralelas en Bloque 1 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-blue-600">SANTIAGO</span>
+            <p class="text-sm mt-1 font-semibold">Pesaje de Líquidos e Insumos Secos</p>
+            <p class="text-xs text-[#86868b] mt-1">Disponer 40 ml de vino blanco, 120 ml de fondo oscuro, 50 ml de crema de leche y 10 ml de vinagre balsámico en vasos dosificadores.</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-red-600">LUFFIT</span>
+            <p class="text-sm mt-1 font-semibold">Corte y Reacción de Maillard en Res</p>
+            <p class="text-xs text-[#86868b] mt-1">Cortar los 180 g de paleta en cubos uniformes de 2.5 cm. Sellar con 15 ml de aceite a fuego alto. (No muevas la carne de inmediato; permite que se forme una costra caramelizada profunda).</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-emerald-600">SOFÍA</span>
+            <p class="text-sm mt-1 font-semibold">Montaje de Papas desde Frío</p>
+            <p class="text-xs text-[#86868b] mt-1">Lavar, pelar y trocear 150 g de papa pastusa y 100 g de papa sabanera. Iniciar la cocción en agua con sal.</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-indigo-600">JULIÁN</span>
+            <p class="text-sm mt-1 font-semibold">Cortes Técnicos del Goulash</p>
+            <p class="text-xs text-[#86868b] mt-1">Cortar pimentón (40 g) y cebolla cabezona (40 g) en cubos de 2.5 cm. Conservar el estándar estricto de simetría.</p>
+          </div>
+        </div>
       </div>
-    </section>
 
-    <!-- PESTAÑA: SANTIAGO -->
-    <section id="content-santiago" class="tab-content hidden">
-      <div class="bg-white rounded-3xl p-6 border border-[#e5e5e7] shadow-sm mb-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+      <!-- BLOQUE 2: Minutos 15 a 30 -->
+      <div class="bg-white rounded-3xl p-6 border border-[#e5e5e7] shadow-sm space-y-4">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-100 pb-4 gap-2">
           <div>
-            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full uppercase tracking-wider">Especialidad: Crema (R1), Salsa (R2) y Vegetales (R2)</span>
-            <h2 class="text-2xl font-bold mt-2">Santiago — Salsas, Crema y Grill</h2>
-            <p class="text-sm text-[#86868b] mt-0.5">Te encargas de elaborar la crema agria, la reducción de maracuyá y jengibre picante, y la cocción de los vegetales grillados.</p>
+            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">BLOQUE 2</span>
+            <h2 class="text-xl font-bold mt-1 text-[#1d1d1f]">Minutos 15 a 30 — Arranque del Estofado y Templado de la Farsa</h2>
           </div>
-          <button onclick="toggleFocusMode('santiago')" class="px-4 py-2 bg-[#f5f5f7] hover:bg-[#e8e8ed] border border-[#d2d2d7] rounded-xl text-xs font-bold transition-all flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            <span id="btn-text-santiago">Ver Modo Enfoque</span>
-          </button>
+          <span class="text-xs font-semibold text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-100">❄️ Enfriamiento de Farsa en Abatidor / Nevera</span>
         </div>
 
-        <!-- Vista Normal -->
-        <div id="normal-santiago" class="space-y-4">
-          <div class="border-l-2 border-blue-500 pl-4 py-1 mb-2">
-            <h3 class="font-bold text-sm text-[#1d1d1f] uppercase tracking-wider">Lista Completa de Pasos</h3>
-          </div>
-        </div>
-
-        <!-- Vista Enfoque -->
-        <div id="focus-santiago" class="hidden py-4 text-center"></div>
-      </div>
-    </section>
-
-    <!-- PESTAÑA: JULIÁN -->
-    <section id="content-julian" class="tab-content hidden">
-      <div class="bg-white rounded-3xl p-6 border border-[#e5e5e7] shadow-sm mb-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+        <!-- Dependencia Crítica -->
+        <div class="bg-red-50 border border-red-100 rounded-2xl p-4 text-xs md:text-sm text-red-800 flex items-start gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
           <div>
-            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full uppercase tracking-wider">Especialidad: Spätzle (R1) y Puré de Papas (R2)</span>
-            <h2 class="text-2xl font-bold mt-2">Julián — Spätzle y Puré de Papas</h2>
-            <p class="text-sm text-[#86868b] mt-0.5">Te encargas de la masa y cocción de los spätzle y de la elaboración completa del puré de papas.</p>
-          </div>
-          <button onclick="toggleFocusMode('julian')" class="px-4 py-2 bg-[#f5f5f7] hover:bg-[#e8e8ed] border border-[#d2d2d7] rounded-xl text-xs font-bold transition-all flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            <span id="btn-text-julian">Ver Modo Enfoque</span>
-          </button>
-        </div>
-
-        <!-- Vista Normal -->
-        <div id="normal-julian" class="space-y-4">
-          <div class="border-l-2 border-emerald-500 pl-4 py-1 mb-2">
-            <h3 class="font-bold text-sm text-[#1d1d1f] uppercase tracking-wider">Lista Completa de Pasos</h3>
+            <strong class="font-bold block">ENTREGAS CRÍTICAS PARA ESTE BLOQUE:</strong>
+            <ul class="list-disc pl-4 mt-1 space-y-1">
+              <li><strong>Julián</strong> debe sofreír el relleno de la Roulade (30 g cebolla, 40 g champiñones) y llevarlo al frío de inmediato. (La farsa debe estar a menos de 10 °C antes de tocar el pollo crudo por inocuidad).</li>
+              <li><strong>Santiago</strong> debe entregar los 45 g de masa para la teja a Julián antes de finalizar este bloque.</li>
+            </ul>
           </div>
         </div>
 
-        <!-- Vista Enfoque -->
-        <div id="focus-julian" class="hidden py-4 text-center"></div>
+        <!-- Tareas paralelas en Bloque 2 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-blue-600">SANTIAGO</span>
+            <p class="text-sm mt-1 font-semibold">Integración de Masa Crocante</p>
+            <p class="text-xs text-[#86868b] mt-1">Combinar 15 g de clara, 15 g de harina y 15 g de mantequilla pomada. Mezclar a mano sin batir.</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-red-600">LUFFIT</span>
+            <p class="text-sm mt-1 font-semibold">Despacho de Estofado y Deshuesado de Pollo</p>
+            <p class="text-xs text-[#86868b] mt-1">Incorporar vegetales a la res, añadir 4 g de paprika y mojar con 120 ml de fondo oscuro. Deshuesar de inmediato el pollo (150 g).</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-emerald-600">SOFÍA</span>
+            <p class="text-sm mt-1 font-semibold">Tamizado Caliente de Almidón</p>
+            <p class="text-xs text-[#86868b] mt-1">Escurrir las papas cocidas. Pasar inmediatamente los 150 g de papa pastusa y los 100 g de papa sabanera por el tamiz en caliente.</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-indigo-600">JULIÁN</span>
+            <p class="text-sm mt-1 font-semibold">Cortes de Farsa y Salteado de Relleno</p>
+            <p class="text-xs text-[#86868b] mt-1">Cortar 30 g de cebolla y 40 g de champiñones. Saltearlos en sartén con 10 ml de aceite de oliva; enfriar en el congelador.</p>
+          </div>
+        </div>
       </div>
-    </section>
+
+      <!-- BLOQUE 3: Minutos 30 a 45 -->
+      <div class="bg-white rounded-3xl p-6 border border-[#e5e5e7] shadow-sm space-y-4">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-100 pb-4 gap-2">
+          <div>
+            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">BLOQUE 3</span>
+            <h2 class="text-xl font-bold mt-1 text-[#1d1d1f]">Minutos 30 a 45 — Bridado, Glaseado y Horneado de Tejas</h2>
+          </div>
+          <span class="text-xs font-semibold text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-100">🍗 Control de Horno a 170 °C</span>
+        </div>
+
+        <!-- Dependencia Crítica -->
+        <div class="bg-red-50 border border-red-100 rounded-2xl p-4 text-xs md:text-sm text-red-800 flex items-start gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <div>
+            <strong class="font-bold block">ENTREGAS CRÍTICAS PARA ESTE BLOQUE:</strong>
+            <ul class="list-disc pl-4 mt-1 space-y-1">
+              <li><strong>Julián</strong> debe retirar la farsa de champiñones fría y entregársela a <strong>Luffit</strong> al inicio de este bloque para proceder con el relleno del pollo.</li>
+              <li><strong>Luffit</strong> debe tener la Roulade rellena, bridada, sellada y dentro del horno antes del minuto 45 para asegurar su cocción interna.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tareas paralelas en Bloque 3 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-blue-600">SANTIAGO</span>
+            <p class="text-sm mt-1 font-semibold">Adición de Vinagre de Reducción al Goulash</p>
+            <p class="text-xs text-[#86868b] mt-1">Supervisar la salsa del Goulash de Luffit. Incorporar los 10 ml de vinagre balsámico para aportar brillo y un toque sutil de acidez.</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-red-600">LUFFIT</span>
+            <p class="text-sm mt-1 font-semibold">Bridado y Saborización del Pollo</p>
+            <p class="text-xs text-[#86868b] mt-1">Rellenar el pollo con la farsa fría. Bridar de forma hermética, sellar con el romero fresco (1 g) y hornear a 180 °C.</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-emerald-600">SOFÍA</span>
+            <p class="text-sm mt-1 font-semibold">Emulsión de Puré Caliente e Hilado de Croquetas</p>
+            <p class="text-xs text-[#86868b] mt-1">Integrar 35 g de mantequilla fría y 40 ml de leche tibia en los 150 g de papa pastusa caliente. Amasar 100 g de papa sabanera con la yema (10 g) y parmesano (15 g).</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-indigo-600">JULIÁN</span>
+            <p class="text-sm mt-1 font-semibold">Torneado de Zanahorias y Horneado de Tejas</p>
+            <p class="text-xs text-[#86868b] mt-1">Tornear 80 g de zanahorias baby. Estirar la masa de Santiago sobre tapete de silicona, espolvorear ajonjolí y hornear a 170 °C por 8 minutos.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOQUE 4: Minutos 45 a 55 -->
+      <div class="bg-white rounded-3xl p-6 border border-[#e5e5e7] shadow-sm space-y-4">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-100 pb-4 gap-2">
+          <div>
+            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">BLOQUE 4</span>
+            <h2 class="text-xl font-bold mt-1 text-[#1d1d1f]">Minutos 45 a 55 — Reducción de Salsa de Vino y Fritura</h2>
+          </div>
+          <span class="text-xs font-semibold text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-100">🍷 Emulsión en Caliente</span>
+        </div>
+
+        <!-- Dependencia Crítica -->
+        <div class="bg-red-50 border border-red-100 rounded-2xl p-4 text-xs md:text-sm text-red-800 flex items-start gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <div>
+            <strong class="font-bold block">ENTREGAS CRÍTICAS PARA ESTE BLOQUE:</strong>
+            <ul class="list-disc pl-4 mt-1 space-y-1">
+              <li><strong>Luffit</strong> debe retirar el pollo del horno en el minuto 50, desglasar la placa de cocción de inmediato con los 40 ml de vino blanco y entregarle el jugo a <strong>Santiago</strong> para emulsionar la salsa.</li>
+              <li><strong>Julián</strong> debe entregar las zanahorias glaseadas calientes a <strong>Sofía</strong> en el minuto 53 para su salazón técnica de servicio.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tareas paralelas en Bloque 4 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-blue-600">SANTIAGO</span>
+            <p class="text-sm mt-1 font-semibold">Elaboración de Salsa de Vino Blanco y Crema</p>
+            <p class="text-xs text-[#86868b] mt-1">Recibir el desglase de Luffit (40 ml vino reducido con jugos), incorporar 50 ml de crema de leche y reducir a fuego muy bajo hasta que nape.</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-red-600">LUFFIT</span>
+            <p class="text-sm mt-1 font-semibold">Desglase Técnico y Reposo Térmico del Pollo</p>
+            <p class="text-xs text-[#86868b] mt-1">Extraer el pollo, desglasar la placa con vino blanco y raspar la base. Dejar reposar la Roulade sobre rejilla limpia.</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-emerald-600">SOFÍA</span>
+            <p class="text-sm mt-1 font-semibold">Fritura Profunda de Croquetas</p>
+            <p class="text-xs text-[#86868b] mt-1">Rebozar las croquetas de papa sabanera en harina (10 g). Freír en los 150 ml de aceite caliente a 170 °C hasta que estén crujientes. Recibir zanahorias baby de Julián.</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-indigo-600">JULIÁN</span>
+            <p class="text-sm mt-1 font-semibold">Glaseado de Zanahorias Baby al Comino</p>
+            <p class="text-xs text-[#86868b] mt-1">Sudar los 80 g de zanahorias torneadas con mantequilla fría, azúcar y una cucharada de agua de cocción hasta que queden brillantes.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOQUE 5: Minutos 55 a 60 -->
+      <div class="bg-white rounded-3xl p-6 border border-[#e5e5e7] shadow-sm space-y-4">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-100 pb-4 gap-2">
+          <div>
+            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">BLOQUE 5</span>
+            <h2 class="text-xl font-bold mt-1 text-[#1d1d1f]">Minutos 55 a 60 — Saborización del Puré, Corte y Montaje</h2>
+          </div>
+          <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">🍽️ Montaje Artístico</span>
+        </div>
+
+        <!-- Dependencia Crítica -->
+        <div class="bg-red-50 border border-red-100 rounded-2xl p-4 text-xs md:text-sm text-red-800 flex items-start gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <div>
+            <strong class="font-bold block">ENTREGAS CRÍTICAS PARA ESTE BLOQUE:</strong>
+            <ul class="list-disc pl-4 mt-1 space-y-1">
+              <li><strong>Luffit</strong> debe permitir que la carne repose antes del trinchado final. (Si cortas de forma apresurada, la Roulade perderá humedad rápidamente).</li>
+              <li><strong>Sofía</strong> debe tener las flores sanitizadas e <strong>Julián</strong> la teja porcionada con exactitud geométrica para que <strong>Santiago</strong> ensamble los platos calientes en el pase.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tareas paralelas en Bloque 5 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-blue-600">SANTIAGO</span>
+            <p class="text-sm mt-1 font-semibold">Emulsión del Puré de Papas y Emplatado</p>
+            <p class="text-xs text-[#86868b] mt-1">Rallar 0.2 g de nuez moscada fresca sobre el puré de Sofía. Ejecutar el emplatado final de los dos platos con las flores y el perejil liso picado (2 g).</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-red-600">LUFFIT</span>
+            <p class="text-sm mt-1 font-semibold">Trinchado de Precisión de Roulade</p>
+            <p class="text-xs text-[#86868b] mt-1">Retirar la brida con tijeras. Rebanar la Roulade en rodajas transversales perfectas de 2 cm de espesor.</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-emerald-600">SOFÍA</span>
+            <p class="text-sm mt-1 font-semibold">Sanitización de Flores y Entrega de Vajilla</p>
+            <p class="text-xs text-[#86868b] mt-1">Retirar las flores comestibles del agua helada. Acondicionar y temperar los platos antes de servirlos para evitar choque térmico de las preparaciones calientes.</p>
+          </div>
+          <div class="bg-[#f5f5f7] p-4 rounded-2xl">
+            <span class="text-xs font-bold text-indigo-600">JULIÁN</span>
+            <p class="text-sm mt-1 font-semibold">Corte de Crocante y Montaje de Guarnición</p>
+            <p class="text-xs text-[#86868b] mt-1">Retirar la teja horneada y partirla de manera uniforme. Entregar las zanahorias baby calientes e higienizadas a la mesa de montaje.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ================= CONTENIDO 2: ROLES INDIVIDUALES (CHECKLIST CON GRAMAJES) ================= -->
+    <div id="view-individual" class="space-y-6 hidden">
+      <div class="bg-[#e5e5e7] p-1.5 rounded-2xl flex gap-1 shadow-inner max-w-md mx-auto">
+        <button onclick="switchIndividualTab('santiago')" id="ind-santiago-btn" class="ind-tab-btn flex-1 py-2 rounded-xl text-xs font-semibold transition-all duration-200 bg-white text-[#1d1d1f] shadow-sm">Santiago</button>
+        <button onclick="switchIndividualTab('luffit')" id="ind-luffit-btn" class="ind-tab-btn flex-1 py-2 rounded-xl text-xs font-semibold transition-all duration-200 text-[#86868b] hover:text-[#1d1d1f]">Luffit</button>
+        <button onclick="switchIndividualTab('sofia')" id="ind-sofia-btn" class="ind-tab-btn flex-1 py-2 rounded-xl text-xs font-semibold transition-all duration-200 text-[#86868b] hover:text-[#1d1d1f]">Sofía</button>
+        <button onclick="switchIndividualTab('julian')" id="ind-julian-btn" class="ind-tab-btn flex-1 py-2 rounded-xl text-xs font-semibold transition-all duration-200 text-[#86868b] hover:text-[#1d1d1f]">Julián</button>
+      </div>
+
+      <!-- SANTIAGO CHECKLIST -->
+      <div id="ind-santiago" class="ind-view block space-y-3 max-w-2xl mx-auto">
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-sat-1" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-sat-1" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M1 (Minutos 00 - 15)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">1. Puesta a Punto de Líquidos e Insumos Secos</span>
+            <span class="text-xs text-[#515154] block mt-1">Medir y separar en contenedores limpios: 40 ml de vino blanco, 120 ml de fondo oscuro, 50 ml de crema de leche y 10 ml de vinagre balsámico. (Organizar esto de inmediato para agilizar el arranque simultáneo de tus compañeros).</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-sat-2" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-sat-2" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M2 (Minutos 15 - 30)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">2. Integración de la masa para la Teja Crocante</span>
+            <span class="text-xs text-[#515154] block mt-1">Mezclar en bowl a mano 15 g de clara de huevo, 15 g de harina pastelera y 15 g de mantequilla pomada. (No batir de más con tu batidor manual para evitar el desarrollo del gluten, manteniendo la teja quebradiza).</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-sat-3" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-sat-3" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M3 (Minutos 30 - 45)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">3. Incorporar Vinagre de Reducción al Goulash</span>
+            <span class="text-xs text-[#515154] block mt-1">Añadir los 10 ml de vinagre balsámico en los últimos 15 minutos del estofado de Luffit para caramelizar los jugos y balancear la acidez.</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-sat-4" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-sat-4" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M4 (Minutos 45 - 55)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">4. Reducción e Incorporación de la Salsa de Vino Blanco</span>
+            <span class="text-xs text-[#515154] block mt-1">Recibir los 40 ml de vino blanco desglasado por Luffit. Añadir los 50 ml de crema de leche y reducir a fuego mínimo hasta obtener consistencia de napa. (No permitas que rompa en hervor violento para que la crema no se corte).</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-sat-5" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-sat-5" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M5 (Minutos 55 - 60)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">5. Condimentado del Puré de Papas en Caliente</span>
+            <span class="text-xs text-[#515154] block mt-1">Rallar 0.2 g de nuez moscada fresca sobre los 150 g de papa pastusa batidos por Sofía. Ajustar sazón con sal fina. (La nuez moscada recién rallada conserva los aceites volátiles y realza el perfil de sabor del puré).</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-sat-6" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-sat-6" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M6 (Minutos 55 - 60)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">6. Dirección de Emplatado y Pase de Servicio</span>
+            <span class="text-xs text-[#515154] block mt-1">Ensamble estético de platos con las flores y el perejil liso picado (2 g). Garantizar la entrega a tiempo de los platos calientes en el pase de servicio.</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- LUFFIT CHECKLIST -->
+      <div id="ind-luffit" class="ind-view hidden space-y-3 max-w-2xl mx-auto">
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-luf-1" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-luf-1" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M1 (Minutos 00 - 15)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">1. Sellar Paleta de Res en Olla</span>
+            <span class="text-xs text-[#515154] block mt-1">Trocear los 180 g de paleta de res en cubos uniformes de 2.5 cm. Sellar con 15 ml de aceite a fuego alto. (La costra de Maillard es fundamental para la profundidad del sabor del Goulash).</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-luf-2" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-luf-2" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M2 (Minutos 15 - 30)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">2. Incorporar Vegetales y Fondo al Goulash</span>
+            <span class="text-xs text-[#515154] block mt-1">Añadir cebolla (40 g) y pimentón (40 g) cortados por Julián. Agregar 4 g de paprika, verter los 120 ml de fondo oscuro de res caliente y tapar para la cocción lenta.</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-luf-3" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-luf-3" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M3 (Minutos 15 - 30)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">3. Deshuesado Técnico de Pierna Pernil</span>
+            <span class="text-xs text-[#515154] block mt-1">Remover tibia y fémur de la pierna de pollo para obtener una pieza limpia de 150 g con su piel entera. (Cuidar de no perforar la piel para retener el relleno).</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-luf-4" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-luf-4" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M4 (Minutos 30 - 45)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">4. Relleno, Bridado y Cocción de Roulade</span>
+            <span class="text-xs text-[#515154] block mt-1">Sazonar el pollo, colocar la farsa fría de champiñones y cebolla de Julián. Enrollar, atar herméticamente con la brida y sellar con romero (1 g) y 10 ml de aceite de oliva antes de hornear a 180 °C.</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-luf-5" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-luf-5" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M5 (Minutos 45 - 55)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">5. Desglase Crítico con Vino Blanco</span>
+            <span class="text-xs text-[#515154] block mt-1">Sacar la Roulade del horno en el minuto 50. Desglasar la base de cocción con los 40 ml de vino blanco frotando para recuperar todos los jugos de cocción y entregar a Santiago de inmediato.</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-luf-6" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-luf-6" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M6 (Minutos 55 - 60)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">6. Reposo y Trinchado de Precisión</span>
+            <span class="text-xs text-[#515154] block mt-1">Permitir reposo del ave por 3 minutos. Retirar brida y cortar rebanadas sesgadas uniformes de 2 cm para el montaje final.</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- SOFIA CHECKLIST -->
+      <div id="ind-sofia" class="ind-view hidden space-y-3 max-w-2xl mx-auto">
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-sof-1" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-sof-1" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M1 (Minutos 00 - 15)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">1. Cocción de papas (Pastusa y Sabanera)</span>
+            <span class="text-xs text-[#515154] block mt-1">Hervir por separado en ollas con agua con sal: 150 g de papa pastusa y 100 g de papa sabanera desde agua fría. (La cocción a partir de frío garantiza uniformidad térmica y evita centros duros).</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-sof-2" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-sof-2" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M2 (Minutos 15 - 30)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">2. Tamizado Técnico del Almidón caliente</span>
+            <span class="text-xs text-[#515154] block mt-1">Escurrir y tamizar en caliente las papas por separado utilizando el prensapapas. (Trabajar en caliente evita una consistencia gomosa).</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-sof-3" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-sof-3" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M3 (Minutos 30 - 45)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">3. Montaje y Emulsión de Puré de Papas</span>
+            <span class="text-xs text-[#515154] block mt-1">Añadir de forma progresiva 35 g de mantequilla muy fría y 40 ml de leche tibia en los 150 g de papa pastusa caliente a fuego mínimo. Batir con fuerza para emulsionar la grasa.</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-sof-4" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-sof-4" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M4 (Minutos 45 - 55)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">4. Moldeado y Fritura de Croquetas Sabanera</span>
+            <span class="text-xs text-[#515154] block mt-1">Ligar los 100 g de papa sabanera con la yema (10 g) y parmesano (15 g). Dar forma esférica uniforme, rebozar en harina (10 g) y freír en los 150 ml de aceite a 170 °C hasta dorar.</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-sof-5" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-sof-5" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M5 (Minutos 55 - 60)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">5. Saborización de Zanahorias y Sanitización</span>
+            <span class="text-xs text-[#515154] block mt-1">Recibir zanahorias baby de Julián, aplicar sal marina y rectificar sazón. Sanitizar las flores comestibles en agua con hielo.</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- JULIAN CHECKLIST -->
+      <div id="ind-julian" class="ind-view hidden space-y-3 max-w-2xl mx-auto">
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-jul-1" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-jul-1" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M1 (Minutos 00 - 15)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">1. Cortes Técnicos de Precisión de Vegetales</span>
+            <span class="text-xs text-[#515154] block mt-1">Cortar pimentón (40 g) y cebolla cabezona (40 g) en cubos de 2.5 cm para el Goulash. Cortar 30 g de cebolla cabezona en brunoise fina para el relleno del ave.</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-jul-2" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-jul-2" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M2 (Minutos 15 - 30)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">2. Elaborar la Farsa de Champiñones</span>
+            <span class="text-xs text-[#515154] block mt-1">Saltear en sartén los 40 g de champiñones laminados con los 30 g de cebolla en brunoise en 10 ml de aceite de oliva. Retirar y enfriar en nevera para entregar a Luffit en el minuto 30.</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-jul-3" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-jul-3" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M3 (Minutos 30 - 45)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">3. Corte y Torneado de Zanahorias</span>
+            <span class="text-xs text-[#515154] block mt-1">Lavar, pelar y tornear los 80 g de zanahorias baby de forma elíptica, puliendo los bordes externos para el examen.</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-jul-4" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-jul-4" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M4 (Minutos 30 - 45)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">4. Horneado de la Teja Crocante de Ajonjolí</span>
+            <span class="text-xs text-[#515154] block mt-1">Recibir los 45 g de masa estirada por Santiago. Hornear a 170 °C durante 8 minutos hasta que esté dorada. (Trabajar esto al final del bloque para asegurar crocancia máxima).</span>
+          </label>
+        </div>
+        <div class="step-card bg-white p-4 rounded-2xl flex items-start gap-4 transition-all hover:shadow-md border border-gray-100">
+          <input type="checkbox" id="chk-jul-5" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" onchange="toggleStep(this)">
+          <label for="chk-jul-5" class="flex-grow cursor-pointer select-none">
+            <span class="text-xs font-bold text-[#86868b] block">M5 (Minutos 45 - 55)</span>
+            <span class="font-bold text-[#1d1d1f] text-sm block mt-0.5">5. Glaseado Técnico de Zanahorias Baby</span>
+            <span class="text-xs text-[#515154] block mt-1">Glasear en sartén con mantequilla, azúcar y comino los 80 g de zanahorias baby hasta formar un barniz brillante. Entregar a Sofía en el minuto 53.</span>
+          </label>
+        </div>
+      </div>
+    </div>
 
   </main>
 
-  <!-- Footer minimalista estilo iOS -->
+  <!-- Footer estilo Apple -->
   <footer class="bg-white border-t border-[#e5e5e7] py-6 text-center text-xs text-[#86868b]">
     <div class="max-w-4xl mx-auto px-6">
-      <p>Brigada de Cocina Profesional • Diseñado para Alta Concentración y Eficiencia</p>
-      <p class="mt-1">Modo Enfoque integrado de manera universal con guardado de progreso local.</p>
+      <p>Brigada de Alta Cocina Profesional • Examen Final 12 de Junio</p>
+      <p class="mt-1">Modo Enfoque integrado para soporte de cocina interactivo sin contacto.</p>
     </div>
   </footer>
 
   <script>
-    // --- DATOS DE PASOS POR INTEGRANTE (CRONOLÓGICOS, EQUILIBRADOS Y SIN REDUNDANCIAS) ---
-    const stepsData = {
-      angela: [
-        {
-          time: "MINUTOS 00 A 15",
-          title: "1. Mise en Place del Goulash",
-          desc: "Limpia la paleta de res retirando los tejidos conectivos. Córtala en cubos uniformes de 2x2 cm para el Goulash de manera limpia."
-        },
-        {
-          time: "MINUTOS 15 A 25",
-          title: "2. Sellar la Carne en Olla",
-          desc: "Calienta una olla con un chorrito de aceite de girasol. Añade los cubos de paleta de res y dóralos de manera uniforme por todos sus lados sin moverlos en exceso para sellar los jugos."
-        },
-        {
-          time: "MINUTOS 25 A 35",
-          title: "3. Añadir Vegetales y Condimentos",
-          desc: "Agrega a la olla del Goulash la cebolla picada, el pimentón, la paprika, sal y pimienta. Remueve con utensilio de cocina para integrar los condimentos y dar color."
-        },
-        {
-          time: "MINUTOS 35 A 50",
-          title: "4. Cocción Lenta del Guiso",
-          desc: "Tapa la olla y pon el fuego al mínimo. Incorpora progresivamente el fondo de carne caliente para evitar que se seque y conseguir que la carne quede muy tierna. Mantente atenta al fuego."
-        },
-        {
-          time: "MINUTOS 50 A 60",
-          title: "5. Apoyo en Spätzle",
-          desc: "Verifica que el Goulash esté listo y la salsa tenga consistencia de napa adecuada. Una vez que esté finalizado, ayuda a Julián a saltear y porcionar los spätzle en la sartén caliente."
-        }
-      ],
-      sofia: [
-        {
-          time: "MINUTOS 00 A 15",
-          title: "1. Limpieza y Corte del Muchacho",
-          desc: "Retira las grasas externas de la pieza de muchacho de res. Córtalo en filetes delgados y regulares para las milanesas. Sazona cada filete con sal y pimienta."
-        },
-        {
-          time: "MINUTOS 15 A 30",
-          title: "2. Estación de Apanado",
-          desc: "Prepara tres recipientes en orden: 1) Harina de trigo. 2) Huevo batido integrado con sal, pimienta, tomillo y perejil picado. 3) Panko con queso parmesano rallado. Pasa los filetes en ese orden estricto, presionando firmemente."
-        },
-        {
-          time: "MINUTOS 30 A 50",
-          title: "3. Reposo en Frío para Fijación",
-          desc: "Coloca las milanesas en una bandeja y llévalas al refrigerador durante 20 minutos. El frío fijará la costra del apanado para evitar que se desprenda durante la cocción."
-        },
-        {
-          time: "MINUTOS 50 A 55",
-          title: "4. Fritura Profunda Controlada",
-          desc: "Calienta abundante aceite a fuego medio (170°C). Fríe las milanesas de manera individual hasta obtener un dorado uniforme. Escurre en papel absorbente y pon una pizca de sal marina de inmediato."
-        },
-        {
-          time: "MINUTOS 55 A 60",
-          title: "5. Corte y Presentación de Carne",
-          desc: "Corta las milanesas en diagonal de forma limpia para lucir la textura y acomódalas de manera estética apoyándolas sobre el puré de albahaca montado por Julián."
-        }
-      ],
-      santiago: [
-        {
-          time: "MINUTOS 00 A 10",
-          title: "1. Crema Agria (Receta 1)",
-          desc: "Bate la crema de leche fría con el zumo de limón y una pizca de sal hasta que tome consistencia firme. Añade el cebollín picado y refrigera en frío de inmediato."
-        },
-        {
-          time: "MINUTOS 10 A 25",
-          title: "2. Preparación de Vegetales y Chile de Árbol",
-          desc: "Corta berenjenas en láminas de medio centímetro, cebollas en rodajas gruesas completas, champiñones por la mitad y pimentón rojo en rectángulos. Toma el chile de árbol seco, ábrelo longitudinalmente y retira absolutamente todas las semillas y venas internas; reserva solo la vaina limpia."
-        },
-        {
-          time: "MINUTOS 25 A 45",
-          title: "3. Elaborar Reducción de Maracuyá, Jengibre y Clavo (Con Infusión de Chile)",
-          desc: "En un sauté con aceite de oliva, transparenta cebolla blanca en brunoise y jengibre rallado por 3 o 5 minutos sin que tome color. Desglasa con vinagre balsámico por 1 minuto. Agrega la pulpa de maracuyá, azúcar, un cucharón de fondo de carne caliente, 1 o 2 clavos de olor enteros y la vaina limpia de chile de árbol. Deja hervir suavemente y, tras 5 a 7 minutos de cocción, retira la vaina del chile con unas pinzas y descártala para evitar un picor excesivo. Deja reducir el resto hasta punto de napa."
-        },
-        {
-          time: "MINUTOS 45 A 55",
-          title: "4. Marcar los Vegetales al Grill",
-          desc: "Pinta los vegetales cortados con aceite de oliva, sal y pimienta. Márcalos en una plancha o grill bien caliente por ambos lados para conseguir un patrón lineal marcado uniforme y reserva calientes."
-        },
-        {
-          time: "MINUTOS 55 A 60",
-          title: "5. Colado, Emulsión y Emplatado",
-          desc: "Pasa la reducción de maracuyá caliente por un colador de malla fina, presionando para recuperar todo el jarabe y descartar sólidos (semillas, jengibre y clavos). Fuera del fuego, añade un cubo de mantequilla muy fría y mueve en círculos para emulsionar (monter au beurre). Monta los vegetales en el plato plano y traza un espejo brillante con la salsa caliente sin humedecer la milanesa de Sofía. Entrega la crema agria a Ángela."
-        }
-      ],
-      julian: [
-        {
-          time: "MINUTOS 00 A 15",
-          title: "1. Cocer las Papas (Receta 2)",
-          desc: "Lava las papas enteras y llévalas a cocción con piel en agua fría y sal. Llévalas a hervor hasta que estén completamente suaves al pincharlas."
-        },
-        {
-          time: "MINUTOS 15 A 30",
-          title: "2. Elaborar la Masa de Spätzle (Receta 1)",
-          desc: "Mezcla el huevo con la leche, sal, pimienta y nuez moscada. Añade la harina cernida e incorpora el agua carbonatada de manera progresiva. Bate con batidor de globo hasta formar una masa homogénea y elástica. Deja reposar."
-        },
-        {
-          time: "MINUTOS 30 A 45",
-          title: "3. Cocción de Spätzle",
-          desc: "Hierve abundante agua con sal. Pasa la masa por el prensa spätzle directamente al agua hirviendo. Retira con espumadera en cuanto floten y enfría en un baño maría inverso con hielo. Escurre bien."
-        },
-        {
-          time: "MINUTOS 45 A 55",
-          title: "4. Elaborar el Puré de Albahaca",
-          desc: "Pela las papas cocidas calientes y pásalas por el prensa puré. Añade inmediatamente mantequilla fría, leche tibia, sal, pimienta y la albahaca picada muy fina en el último instante para que no se oxide con el calor residual. Mezcla hasta conseguir una consistencia lisa."
-        },
-        {
-          time: "MINUTOS 55 A 60",
-          title: "5. Salteado de Spätzle y Montaje",
-          desc: "Saltea los spätzle en una sartén caliente con mantequilla hasta dorar ligeramente. Añade queso parmesano. Ángela te ayudará en este paso si su Goulash ya está listo. Emplata usando el aro de 8 cm y forma el puré en óvalo en el plato plano."
-        }
-      ]
-    };
+    // --- LÓGICA DE VISTAS (LÍNEA DE TIEMPO VS. INDIVIDUAL) ---
+    function switchView(viewId) {
+      const timelineView = document.getElementById('view-timeline');
+      const individualView = document.getElementById('view-individual');
+      const timelineBtn = document.getElementById('view-timeline-btn');
+      const individualBtn = document.getElementById('view-individual-btn');
 
-    // --- ESTADO DE NAVEGACIÓN Y ENFOQUE ---
-    const userState = {
-      angela: { activeStep: 0, focusActive: false },
-      sofia: { activeStep: 0, focusActive: false },
-      santiago: { activeStep: 0, focusActive: false },
-      julian: { activeStep: 0, focusActive: false }
-    };
+      if (viewId === 'timeline') {
+        timelineView.classList.remove('hidden');
+        timelineView.classList.add('block');
+        individualView.classList.add('hidden');
+        individualView.classList.remove('block');
 
-    // --- LÓGICA DE CONTROL DE PESTAÑAS ---
-    function switchTab(tabName) {
-      const contents = document.querySelectorAll('.tab-content');
-      contents.forEach(content => content.classList.add('hidden'));
-      contents.forEach(content => content.classList.remove('block'));
+        timelineBtn.classList.add('bg-white', 'text-[#1d1d1f]', 'shadow-sm');
+        timelineBtn.classList.remove('text-[#86868b]', 'hover:text-[#1d1d1f]');
+        individualBtn.classList.remove('bg-white', 'text-[#1d1d1f]', 'shadow-sm');
+        individualBtn.classList.add('text-[#86868b]', 'hover:text-[#1d1d1f]');
+      } else {
+        timelineView.classList.add('hidden');
+        timelineView.classList.remove('block');
+        individualView.classList.remove('hidden');
+        individualView.classList.add('block');
 
-      const tabs = document.querySelectorAll('.tab-btn');
-      tabs.forEach(tab => {
-        tab.classList.remove('bg-blue-600', 'text-white', 'shadow-sm');
-        tab.classList.add('text-[#86868b]', 'hover:text-[#1d1d1f]', 'hover:bg-[#f5f5f7]');
-      });
-
-      const activeContent = document.getElementById(`content-${tabName}`);
-      activeContent.classList.remove('hidden');
-      activeContent.classList.add('block');
-
-      const activeTab = document.getElementById(`tab-${tabName}`);
-      activeTab.classList.add('bg-blue-600', 'text-white', 'shadow-sm');
-      activeTab.classList.remove('text-[#86868b]', 'hover:text-[#1d1d1f]', 'hover:bg-[#f5f5f7]');
+        individualBtn.classList.add('bg-white', 'text-[#1d1d1f]', 'shadow-sm');
+        individualBtn.classList.remove('text-[#86868b]', 'hover:text-[#1d1d1f]');
+        timelineBtn.classList.remove('bg-white', 'text-[#1d1d1f]', 'shadow-sm');
+        timelineBtn.classList.add('text-[#86868b]', 'hover:text-[#1d1d1f]');
+      }
     }
 
-    // --- EFECTO DE CHECKBOX PARA INTEGRANTES ---
-    function toggleCardDim(checkbox) {
+    // --- LÓGICA DE TABULADORES INDIVIDUALES ---
+    function switchIndividualTab(tabId) {
+      // Ocultar vistas individuales
+      const indViews = document.querySelectorAll('.ind-view');
+      indViews.forEach(view => {
+        view.classList.add('hidden');
+        view.classList.remove('block');
+      });
+
+      // Resetear estilo de botones individuales
+      const indBtns = document.querySelectorAll('.ind-tab-btn');
+      indBtns.forEach(btn => {
+        btn.classList.remove('bg-white', 'text-[#1d1d1f]', 'shadow-sm');
+        btn.classList.add('text-[#86868b]', 'hover:text-[#1d1d1f]');
+      });
+
+      // Mostrar elemento activo
+      const activeView = document.getElementById(`ind-${tabId}`);
+      if (activeView) {
+        activeView.classList.remove('hidden');
+        activeView.classList.add('block');
+      }
+
+      const activeBtn = document.getElementById(`ind-${tabId}-btn`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-[#1d1d1f]', 'shadow-sm');
+        activeBtn.classList.remove('text-[#86868b]', 'hover:text-[#1d1d1f]');
+      }
+    }
+
+    // --- CHECKLIST INTERACTIVO CON GUARDADO LOCAL ---
+    function toggleStep(checkbox) {
       const card = checkbox.closest('.step-card');
+      const label = card.querySelector('label');
+      
       if (checkbox.checked) {
         card.classList.add('opacity-40', 'bg-slate-200');
-        card.classList.remove('bg-[#f5f5f7]', 'hover:bg-white', 'hover:shadow-md');
+        card.classList.remove('bg-white', 'hover:shadow-md');
+        if (label) {
+          label.classList.add('line-through');
+        }
       } else {
         card.classList.remove('opacity-40', 'bg-slate-200');
-        card.classList.add('bg-[#f5f5f7]');
-      }
-    }
-
-    // --- RENDERIZACIÓN DE LOS ELEMENTOS ---
-    function initApp() {
-      Object.keys(stepsData).forEach(user => {
-        renderNormalView(user);
-        renderFocusView(user);
-      });
-    }
-
-    // Renderizar la lista de pasos normal
-    function renderNormalView(user) {
-      const container = document.getElementById(`normal-${user}`);
-      // Limpiar pero mantener el título de cabecera
-      const headerHTML = container.querySelector('.border-l-2').outerHTML;
-      container.innerHTML = headerHTML;
-
-      stepsData[user].forEach((step, index) => {
-        const stepCard = document.createElement('div');
-        stepCard.className = "step-card bg-[#f5f5f7] p-4 rounded-2xl flex items-start gap-4 transition-all hover:bg-white hover:shadow-md hover:ring-1 hover:ring-[#d2d2d7]";
-        
-        stepCard.innerHTML = `
-          <input type="checkbox" id="${user}-chk-${index}" class="mt-1 h-5 w-5 rounded-md border-gray-300 text-blue-600 focus:ring-blue-500" onchange="toggleCardDim(this)">
-          <label for="${user}-chk-${index}" class="flex-grow cursor-pointer select-none">
-            <span class="text-xs font-bold text-[#86868b] block">${step.time}</span>
-            <span class="font-bold text-[#1d1d1f] text-base block mt-0.5">${step.title}</span>
-            <span class="text-sm text-[#515154] block mt-1">${step.desc}</span>
-          </label>
-        `;
-        container.appendChild(stepCard);
-      });
-    }
-
-    // Conmutar entre Modo Normal y Modo Enfoque para cualquier integrante
-    function toggleFocusMode(user) {
-      const state = userState[user];
-      state.focusActive = !state.focusActive;
-
-      const normalContainer = document.getElementById(`normal-${user}`);
-      const focusContainer = document.getElementById(`focus-${user}`);
-      const btnText = document.getElementById(`btn-text-${user}`);
-
-      if (state.focusActive) {
-        normalContainer.classList.add('hidden');
-        focusContainer.classList.remove('hidden');
-        btnText.innerText = "Ver Vista Completa";
-        renderFocusStep(user);
-      } else {
-        normalContainer.classList.remove('hidden');
-        focusContainer.classList.add('hidden');
-        btnText.innerText = "Ver Modo Enfoque";
-      }
-    }
-
-    // Renderizar un paso específico en el modo enfoque
-    function renderFocusStep(user) {
-      const state = userState[user];
-      const step = stepsData[user][state.activeStep];
-      const container = document.getElementById(`focus-${user}`);
-
-      const totalSteps = stepsData[user].length;
-      let dotsHTML = "";
-      for (let i = 0; i < totalSteps; i++) {
-        dotsHTML += `<span class="w-2.5 h-2.5 rounded-full transition-all duration-300 ${i === state.activeStep ? 'bg-blue-600 w-5' : 'bg-slate-300'}"></span>`;
-      }
-
-      const isLastStep = state.activeStep === totalSteps - 1;
-
-      container.innerHTML = `
-        <div class="mb-4">
-          <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full uppercase tracking-wider">Paso actual</span>
-        </div>
-        
-        <div class="max-w-xl mx-auto bg-gradient-to-b from-[#f5f5f7] to-white p-8 rounded-3xl border border-blue-100 shadow-sm relative">
-          <span class="text-xs font-bold text-blue-600 block mb-1">${step.time}</span>
-          <h3 class="text-2xl font-bold text-[#1d1d1f] mb-4">${step.title}</h3>
-          <p class="text-base text-[#515154] mb-8 leading-relaxed">${step.desc}</p>
-          
-          <div class="flex justify-between items-center mt-6">
-            <button onclick="navigateFocus('${user}', -1)" class="px-4 py-2 text-sm font-semibold text-[#86868b] hover:text-[#1d1d1f] disabled:opacity-30" ${state.activeStep === 0 ? 'disabled' : ''}>
-              Anterior
-            </button>
-            
-            <div class="flex gap-1.5">
-              ${dotsHTML}
-            </div>
-
-            <button onclick="navigateFocus('${user}', 1)" class="px-6 py-2.5 ${isLastStep ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} text-white rounded-xl text-sm font-bold transition-all shadow-sm">
-              ${isLastStep ? '¡Listo! Terminar' : '¡Listo! Siguiente'}
-            </button>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderFocusView(user) {
-      const container = document.getElementById(`focus-${user}`);
-      container.innerHTML = `<p class="text-slate-400 text-sm">Cargando modo enfoque...</p>`;
-    }
-
-    // Navegar en los pasos del modo enfoque
-    function navigateFocus(user, direction) {
-      const state = userState[user];
-      const totalSteps = stepsData[user].length;
-
-      if (direction === 1) {
-        if (state.activeStep < totalSteps - 1) {
-          state.activeStep++;
-          renderFocusStep(user);
-        } else {
-          // Completado del último paso
-          toggleFocusMode(user);
-          // Marcar todos los checks de la vista normal como listos
-          for (let i = 0; i < totalSteps; i++) {
-            const chk = document.getElementById(`${user}-chk-${i}`);
-            if (chk) {
-              chk.checked = true;
-              toggleCardDim(chk);
-            }
-          }
-          state.activeStep = 0;
-        }
-      } else {
-        if (state.activeStep > 0) {
-          state.activeStep--;
-          renderFocusStep(user);
+        card.classList.add('bg-white');
+        if (label) {
+          label.classList.remove('line-through');
         }
       }
+      
+      // Persistencia local en el dispositivo del estudiante
+      const stepId = checkbox.id;
+      localStorage.setItem(stepId, checkbox.checked ? 'true' : 'false');
     }
 
-
-    // --- CRONÓMETRO DE COCINA (60 MINUTOS) ---
+    // --- CRONÓMETRO DE EXAMEN (60 MINUTOS DE REVERSA) ---
     let timerInterval = null;
     let timeRemaining = 60 * 60; // 60 minutos en segundos
     let isTimerRunning = false;
@@ -506,7 +705,6 @@
     const toggleBtn = document.getElementById('btn-timer-toggle');
     const playIcon = document.getElementById('play-icon');
     const pauseIcon = document.getElementById('pause-icon');
-    const resetBtn = document.getElementById('btn-timer-reset');
 
     function updateTimerDisplay() {
       const minutes = Math.floor(timeRemaining / 60);
@@ -522,16 +720,19 @@
           timeRemaining--;
           updateTimerDisplay();
           
-          // Alerta preventiva a los 10 minutos finales
-          if (timeRemaining === 10 * 60) {
-            showAlert("⚠️ ¡Últimos 10 minutos de cocina! Empiecen a finalizar cocciones.");
+          // Alertas críticas en el examen
+          if (timeRemaining === 15 * 60) {
+            alert("⚠️ ¡Atención Brigada! Faltan 15 minutos. Las Roulades deben salir del horno y las croquetas de Sofía comenzar fritura.");
+          }
+          if (timeRemaining === 5 * 60) {
+            alert("⚠️ ¡Pase Inminente! Últimos 5 minutos. Santiago debe comenzar la estructuración final de los platos calientes.");
           }
         } else {
           clearInterval(timerInterval);
           isTimerRunning = false;
           playIcon.classList.remove('hidden');
           pauseIcon.classList.add('hidden');
-          showAlert("🚨 ¡TIEMPO AGOTADO! Presenten sus platos de inmediato.");
+          alert("🚨 ¡TIEMPO AGOTADO! Manos arriba, presenten sus platos en el pase.");
         }
       }, 1000);
     }
@@ -553,39 +754,16 @@
       }
     });
 
-    resetBtn.addEventListener('click', () => {
-      clearInterval(timerInterval);
-      timeRemaining = 60 * 60;
-      isTimerRunning = false;
-      playIcon.classList.remove('hidden');
-      pauseIcon.classList.add('hidden');
-      updateTimerDisplay();
-      closeAlert();
-    });
-
-
-    // --- NOTIFICACIONES EN PANTALLA ---
-    function showAlert(text) {
-      const alertBox = document.getElementById('custom-alert');
-      document.getElementById('alert-text').innerText = text;
-      alertBox.classList.remove('hidden');
-      alertBox.classList.add('flex');
-      
-      // Auto ocultado a los 8 segundos
-      setTimeout(() => {
-        closeAlert();
-      }, 8000);
-    }
-
-    function closeAlert() {
-      const alertBox = document.getElementById('custom-alert');
-      alertBox.classList.add('hidden');
-      alertBox.classList.remove('flex');
-    }
-
-    // --- AL CARGAR EL DOCUMENTO ---
+    // --- CARGAR ESTADOS AL INICIAR ---
     window.onload = function() {
-      initApp();
+      const checkboxes = document.querySelectorAll('.step-card input[type="checkbox"]');
+      checkboxes.forEach(chk => {
+        const savedState = localStorage.getItem(chk.id);
+        if (savedState === 'true') {
+          chk.checked = true;
+          toggleStep(chk);
+        }
+      });
     };
   </script>
 </body>
