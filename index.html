@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conserva Agridulce de Autor - Mango Biche</title>
+    <title>Ficha Técnica: Conserva Agridulce de Mango Biche</title>
     <!-- Tailwind CSS para diseño moderno -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Alpine.js para interactividad simple y reactiva -->
-    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <!-- Lucide Icons para una interfaz pulida -->
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght=0,400;0,600;0,700;1,400&display=swap');
         
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -19,733 +15,231 @@
         .font-serif-elegant {
             font-family: 'Playfair Display', serif;
         }
-        /* Custom scrollbar para estética impecable */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
     </style>
 </head>
-<body class="bg-stone-50 text-stone-800 min-h-screen pb-12" x-data="conservaApp()">
+<body class="bg-stone-50 text-stone-800 min-h-screen pb-12">
 
-    <!-- Cabecera de Autor con Efecto Vidrio Líquido -->
-    <header class="relative bg-gradient-to-r from-amber-500/10 via-amber-600/5 to-red-500/10 border-b border-stone-200 overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
-        <div class="absolute inset-0 opacity-40 bg-[radial-gradient(#d97706_1px,transparent_1px)] [background-size:16px_16px]"></div>
-        <div class="max-w-5xl mx-auto relative z-10 text-center">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200 mb-4 tracking-wider uppercase">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Formulación Técnica de Autor
+    <!-- Cabecera Premium Estilo Autor -->
+    <header class="relative bg-gradient-to-r from-amber-500/10 via-amber-600/5 to-red-500/10 border-b border-stone-200 overflow-hidden py-10 px-4 sm:px-6 lg:px-8">
+        <div class="absolute inset-0 opacity-30 bg-[radial-gradient(#d97706_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-4xl mx-auto relative z-10 text-center">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200 mb-3 tracking-wider uppercase">
+                Fórmula Técnica de Conservación • 500 ml
             </span>
-            <h1 class="text-4xl sm:text-5xl font-extrabold font-serif-elegant tracking-tight text-stone-900 mb-3">
+            <h1 class="text-3xl sm:text-4xl font-extrabold font-serif-elegant tracking-tight text-stone-900 mb-2">
                 Conserva Agridulce de <span class="text-amber-600 italic">Mango Biche</span>
             </h1>
-            <p class="max-w-2xl mx-auto text-stone-600 text-sm sm:text-base leading-relaxed">
-                Optimización técnica para volumen de <strong class="text-stone-900 font-semibold">500 ml</strong>. El uso de vinagre de arroz aporta acidez sutil y limpia, estabilizando la pectina y previniendo la cristalización para lograr un impecable <span class="underline decoration-amber-500 decoration-2 underline-offset-4 font-medium text-stone-900">efecto vidrio líquido</span>.
+            <p class="max-w-xl mx-auto text-stone-600 text-xs sm:text-sm leading-relaxed">
+                Formulación de autor optimizada para un volumen final exacto de 500 ml (3 frascos de 100 ml y 1 de 200 ml). El vinagre de arroz estabiliza la pectina y previene la cristalización, logrando un acabado cristalino tipo vidrio líquido.
             </p>
         </div>
     </header>
 
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         
-        <!-- Panel de Control del Volumen / Escalador -->
-        <section class="bg-white rounded-2xl border border-stone-200/80 shadow-sm p-6 mb-8">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div>
-                    <h2 class="text-lg font-bold text-stone-900 flex items-center gap-2">
-                        <i data-lucide="sliders" class="w-5 h-5 text-amber-500"></i>
-                        Escalador Dinámico de Batch
-                    </h2>
-                    <p class="text-xs text-stone-500 mt-1">Modifica el volumen base para recalcular automáticamente los pesos exactos de la fórmula.</p>
-                </div>
-                
-                <div class="flex flex-wrap items-center gap-4">
-                    <!-- Selector de Frascos Preestablecido -->
-                    <div class="bg-stone-100 p-1 rounded-lg flex gap-1">
-                        <button 
-                            @click="setPreset(500)" 
-                            :class="volumenBase === 500 ? 'bg-white text-stone-900 shadow-xs' : 'text-stone-600 hover:text-stone-950'"
-                            class="px-3 py-1.5 rounded-md text-xs font-semibold transition-all">
-                            Original (500 ml)
-                        </button>
-                        <button 
-                            @click="setPreset(1000)" 
-                            :class="volumenBase === 1000 ? 'bg-white text-stone-900 shadow-xs' : 'text-stone-600 hover:text-stone-950'"
-                            class="px-3 py-1.5 rounded-md text-xs font-semibold transition-all">
-                            1 Litro (1000 ml)
-                        </button>
-                    </div>
-
-                    <!-- Input Personalizado -->
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-stone-500 font-medium">Volumen total:</span>
-                        <div class="relative rounded-md shadow-xs">
-                            <input 
-                                type="number" 
-                                min="100" 
-                                max="10000" 
-                                step="50"
-                                x-model.number="volumenBase" 
-                                class="w-24 text-center pr-8 py-1.5 bg-stone-50 border border-stone-300 rounded-lg text-sm font-bold text-stone-900 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-                            />
-                            <div class="absolute inset-y-0 right-2 flex items-center pointer-events-none">
-                                <span class="text-xs text-stone-400 font-bold">ml</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Dos Columnas: Ingredientes y Distribución Visual -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
             
-            <!-- COLUMNA 1: INGREDIENTES ESCALADOS (7 cols) -->
-            <section class="lg:col-span-7 bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden">
-                <div class="border-b border-stone-100 bg-stone-50/70 px-6 py-4 flex items-center justify-between">
-                    <h3 class="font-bold text-stone-900 flex items-center gap-2">
-                        <i data-lucide="scale" class="w-5 h-5 text-amber-500"></i>
-                        Ingredientes Escalados
-                    </h3>
-                    <span class="text-xs font-mono bg-stone-200/60 text-stone-700 px-2.5 py-1 rounded-md">
-                        Factor: x<span x-text="factorCalculado.toFixed(2)"></span>
-                    </span>
+            <!-- COLUMNA 1: INGREDIENTES (MEDIDAS EN G / ML) -->
+            <section class="md:col-span-5 bg-white rounded-2xl border border-stone-200 shadow-sm p-6 self-start">
+                <h2 class="text-base font-bold text-stone-950 uppercase tracking-wider mb-4 border-b border-stone-100 pb-2 flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                    Ingredientes (500 ml)
+                </h2>
+                
+                <ul class="space-y-3.5 text-xs sm:text-sm">
+                    <li class="flex justify-between items-start border-b border-stone-50 pb-2">
+                        <div>
+                            <strong class="text-stone-900 block">Mango Biche</strong>
+                            <span class="text-[11px] text-stone-400">Limpio, sin piel ni semilla, en cubos de 0.5 cm</span>
+                        </div>
+                        <span class="font-mono font-bold text-stone-950 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/40">710 g</span>
+                    </li>
+                    <li class="flex justify-between items-start border-b border-stone-50 pb-2">
+                        <div>
+                            <strong class="text-stone-900 block">Azúcar Blanca</strong>
+                            <span class="text-[11px] text-stone-400">Base del almíbar cristalino</span>
+                        </div>
+                        <span class="font-mono font-bold text-stone-950 bg-stone-100 px-2 py-0.5 rounded-md">330 g</span>
+                    </li>
+                    <li class="flex justify-between items-start border-b border-stone-50 pb-2">
+                        <div>
+                            <strong class="text-stone-900 block">Agua Inicial</strong>
+                            <span class="text-[11px] text-stone-400">Base de disolución</span>
+                        </div>
+                        <span class="font-mono font-bold text-stone-950 bg-stone-100 px-2 py-0.5 rounded-md">200 ml</span>
+                    </li>
+                    <li class="flex justify-between items-start border-b border-stone-50 pb-2">
+                        <div>
+                            <strong class="text-stone-900 block">Vinagre de Arroz</strong>
+                            <span class="text-[11px] text-stone-400">Acidez sutil y brillo líquido</span>
+                        </div>
+                        <span class="font-mono font-bold text-stone-950 bg-stone-100 px-2 py-0.5 rounded-md">45 ml</span>
+                    </li>
+                    <li class="flex justify-between items-start border-b border-stone-50 pb-2">
+                        <div>
+                            <strong class="text-stone-900 block">Sumac (Zumaque)</strong>
+                            <span class="text-[11px] text-stone-400">Para activar por separado</span>
+                        </div>
+                        <span class="font-mono font-bold text-stone-950 bg-red-50 text-red-900 px-2 py-0.5 rounded-md border border-red-200/40">11 g</span>
+                    </li>
+                    <li class="flex justify-between items-start border-b border-stone-50 pb-2">
+                        <div>
+                            <strong class="text-stone-900 block">Vaina de Vainilla</strong>
+                            <span class="text-[11px] text-stone-400">1 unidad raspada (aprox. 3 g)</span>
+                        </div>
+                        <span class="font-mono font-bold text-stone-950 bg-stone-100 px-2 py-0.5 rounded-md">3 g</span>
+                    </li>
+                    <li class="flex justify-between items-start border-b border-stone-50 pb-2">
+                        <div>
+                            <strong class="text-stone-900 block">Canela en Astillas</strong>
+                            <span class="text-[11px] text-stone-400">Equivalente a 2 o 3 astillas grandes</span>
+                        </div>
+                        <span class="font-mono font-bold text-stone-950 bg-stone-100 px-2 py-0.5 rounded-md">10 g</span>
+                    </li>
+                    <li class="flex justify-between items-start border-b border-stone-50 pb-2">
+                        <div>
+                            <strong class="text-stone-900 block">Clavos de Olor</strong>
+                            <span class="text-[11px] text-stone-400">Equivalente a 8 unidades</span>
+                        </div>
+                        <span class="font-mono font-bold text-stone-950 bg-stone-100 px-2 py-0.5 rounded-md">1 g</span>
+                    </li>
+                    <li class="flex justify-between items-start">
+                        <div>
+                            <strong class="text-stone-900 block">Sal</strong>
+                            <span class="text-[11px] text-stone-400">Una pizca para balancear</span>
+                        </div>
+                        <span class="font-mono font-bold text-stone-950 bg-stone-100 px-2 py-0.5 rounded-md">1 g</span>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- COLUMNA 2: TABLA DE PROCESOS -->
+            <section class="md:col-span-7 bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
+                <div class="border-b border-stone-100 bg-stone-50 px-6 py-4">
+                    <h2 class="text-base font-bold text-stone-950 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                        Ficha Técnica Maestra de Procesos
+                    </h2>
                 </div>
                 
-                <div class="divide-y divide-stone-100 px-6">
-                    <!-- Mango Biche -->
-                    <div class="py-3.5 flex items-center justify-between group">
-                        <div class="flex items-start gap-3">
-                            <span class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-amber-400"></span>
-                            <div>
-                                <h4 class="font-semibold text-stone-900 text-sm sm:text-base">Mango Biche</h4>
-                                <p class="text-xs text-stone-400">Limpio, sin piel ni semilla, en cubos de 0.5 cm.</p>
-                            </div>
+                <div class="divide-y divide-stone-100">
+                    <!-- Paso 1 -->
+                    <div class="p-4 sm:p-5 flex gap-4">
+                        <span class="font-mono text-xs font-bold text-stone-400 mt-1">01</span>
+                        <div>
+                            <span class="text-[10px] font-bold text-stone-400 uppercase tracking-wider block">Preparación</span>
+                            <h3 class="font-bold text-stone-900 text-sm mb-1">Corte Preciso (Cubos de 0.5 cm)</h3>
+                            <p class="text-xs text-stone-600 leading-relaxed">Estética geométrica uniforme y óptima penetración osmótica de los azúcares.</p>
                         </div>
-                        <div class="text-right">
-                            <span class="font-mono text-base sm:text-lg font-bold text-stone-950" x-text="formatearGramaje(ingredientes.mango * factorCalculado)"></span>
+                    </div>
+                    
+                    <!-- Paso 2 -->
+                    <div class="p-4 sm:p-5 flex gap-4">
+                        <span class="font-mono text-xs font-bold text-stone-400 mt-1">02</span>
+                        <div>
+                            <span class="text-[10px] font-bold text-orange-500 uppercase tracking-wider block">Térmica</span>
+                            <h3 class="font-bold text-stone-900 text-sm mb-1">Blanqueado (60 a 90 Segundos)</h3>
+                            <p class="text-xs text-stone-600 leading-relaxed">En agua hirviendo con sal (1 g) para inactivar enzimas y limpiar el exceso de almidón.</p>
                         </div>
                     </div>
 
-                    <!-- Azúcar Blanca -->
-                    <div class="py-3.5 flex items-center justify-between">
-                        <div class="flex items-start gap-3">
-                            <span class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-stone-300"></span>
-                            <div>
-                                <h4 class="font-semibold text-stone-900 text-sm sm:text-base">Azúcar Blanca</h4>
-                                <p class="text-xs text-stone-400">Base para el almíbar de brillo fluido.</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="font-mono text-base sm:text-lg font-bold text-stone-950" x-text="formatearGramaje(ingredientes.azucar * factorCalculado)"></span>
+                    <!-- Paso 3 -->
+                    <div class="p-4 sm:p-5 flex gap-4">
+                        <span class="font-mono text-xs font-bold text-stone-400 mt-1">03</span>
+                        <div>
+                            <span class="text-[10px] font-bold text-blue-500 uppercase tracking-wider block">Choque</span>
+                            <h3 class="font-bold text-stone-900 text-sm mb-1">Fijación de Color</h3>
+                            <p class="text-xs text-stone-600 leading-relaxed">Transferir inmediatamente a agua con hielo. Escurrir por completo para eliminar agua libre.</p>
                         </div>
                     </div>
 
-                    <!-- Agua Base -->
-                    <div class="py-3.5 flex items-center justify-between">
-                        <div class="flex items-start gap-3">
-                            <span class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-sky-300"></span>
-                            <div>
-                                <h4 class="font-semibold text-stone-900 text-sm sm:text-base">Agua Inicial</h4>
-                                <p class="text-xs text-stone-400">Agua base de disolución cristalina.</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="font-mono text-base sm:text-lg font-bold text-stone-950" x-text="formatearMililitros(ingredientes.agua * factorCalculado)"></span>
+                    <!-- Paso 4 -->
+                    <div class="p-4 sm:p-5 flex gap-4">
+                        <span class="font-mono text-xs font-bold text-stone-400 mt-1">04</span>
+                        <div>
+                            <span class="text-[10px] font-bold text-amber-600 uppercase tracking-wider block">Almíbar</span>
+                            <h3 class="font-bold text-stone-900 text-sm mb-1">Base Cristalina</h3>
+                            <p class="text-xs text-stone-600 leading-relaxed">Hervir el agua (200 ml), azúcar (330 g), vinagre de arroz (45 ml), canela, clavos y vainilla hasta disolución total.</p>
                         </div>
                     </div>
 
-                    <!-- Vinagre de Arroz -->
-                    <div class="py-3.5 flex items-center justify-between">
-                        <div class="flex items-start gap-3">
-                            <span class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-yellow-200"></span>
-                            <div>
-                                <h4 class="font-semibold text-stone-900 text-sm sm:text-base">Vinagre de Arroz</h4>
-                                <p class="text-xs text-stone-400">Aporta la acidez fluida y estabiliza la pectina.</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="font-mono text-base sm:text-lg font-bold text-stone-950" x-text="formatearMililitros(ingredientes.vinagre * factorCalculado)"></span>
+                    <!-- Paso 5 -->
+                    <div class="p-4 sm:p-5 flex gap-4">
+                        <span class="font-mono text-xs font-bold text-stone-400 mt-1">05</span>
+                        <div>
+                            <span class="text-[10px] font-bold text-yellow-600 uppercase tracking-wider block">Unión</span>
+                            <h3 class="font-bold text-stone-900 text-sm mb-1">Confitado</h3>
+                            <p class="text-xs text-stone-600 leading-relaxed">Incorporar los cubos de mango al almíbar base y cocinar a fuego mínimo para el intercambio de azúcares.</p>
                         </div>
                     </div>
 
-                    <!-- Sumac -->
-                    <div class="py-3.5 flex items-center justify-between">
-                        <div class="flex items-start gap-3">
-                            <span class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-red-600"></span>
-                            <div>
-                                <h4 class="font-semibold text-stone-900 text-sm sm:text-base">Sumac (Zumaque)</h4>
-                                <p class="text-xs text-stone-400">Para activar por separado. Nota cítrica y moteado rojo.</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="font-mono text-base sm:text-lg font-bold text-stone-950" x-text="formatearGramaje(ingredientes.sumac * factorCalculado)"></span>
+                    <!-- Paso 6 -->
+                    <div class="p-4 sm:p-5 flex gap-4">
+                        <span class="font-mono text-xs font-bold text-stone-400 mt-1">06</span>
+                        <div>
+                            <span class="text-[10px] font-bold text-red-600 uppercase tracking-wider block">Activar</span>
+                            <h3 class="font-bold text-stone-900 text-sm mb-1">Bloom del Sumac (11 g)</h3>
+                            <p class="text-xs text-stone-600 leading-relaxed">Mezclar el sumac con 40 ml del almíbar caliente de la olla en un tazón aparte. Reposar 5 minutos para liberar aceites y evitar grumos.</p>
                         </div>
                     </div>
 
-                    <!-- Vaina de Vainilla -->
-                    <div class="py-3.5 flex items-center justify-between">
-                        <div class="flex items-start gap-3">
-                            <span class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-amber-950"></span>
-                            <div>
-                                <h4 class="font-semibold text-stone-900 text-sm sm:text-base">Vaina de Vainilla</h4>
-                                <p class="text-xs text-stone-400">Vaina raspada (puntos suspendidos).</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="font-mono text-base sm:text-lg font-bold text-stone-950" x-text="formatearUnidades(ingredientes.vainilla * factorCalculado, 'u')"></span>
+                    <!-- Paso 7 -->
+                    <div class="p-4 sm:p-5 flex gap-4">
+                        <span class="font-mono text-xs font-bold text-stone-400 mt-1">07</span>
+                        <div>
+                            <span class="text-[10px] font-bold text-rose-600 uppercase tracking-wider block">Infusión</span>
+                            <h3 class="font-bold text-stone-900 text-sm mb-1">Saborización Final</h3>
+                            <p class="text-xs text-stone-600 leading-relaxed">Verter la infusión de sumac a la olla principal para integrar la nota cítrica y el moteado rojo rubí.</p>
                         </div>
                     </div>
 
-                    <!-- Especias Secas -->
-                    <div class="py-3.5 flex items-center justify-between">
-                        <div class="flex items-start gap-3">
-                            <span class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-amber-800"></span>
-                            <div>
-                                <h4 class="font-semibold text-stone-900 text-sm sm:text-base">Clavos y Canela</h4>
-                                <p class="text-xs text-stone-400">Especiado base. Retirar al final de la cocción.</p>
-                            </div>
-                        </div>
-                        <div class="text-right text-xs sm:text-sm font-mono text-stone-700">
-                            <div class="font-bold text-stone-950" x-text="formatearUnidades(ingredientes.clavos * factorCalculado, 'clavos')"></div>
-                            <div x-text="formatearUnidades(ingredientes.canela * factorCalculado, 'astillas')"></div>
+                    <!-- Paso 8 -->
+                    <div class="p-4 sm:p-5 flex gap-4">
+                        <span class="font-mono text-xs font-bold text-stone-400 mt-1">08</span>
+                        <div>
+                            <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider block">Punto</span>
+                            <h3 class="font-bold text-stone-900 text-sm mb-1">Densidad Napa (5 a 8 minutos)</h3>
+                            <p class="text-xs text-stone-600 leading-relaxed">Cocinar hasta consistencia fluida. Retirar vainilla, canela y clavos. Validar consistencia con la prueba del plato frío (no debe quedar pastoso).</p>
                         </div>
                     </div>
 
-                    <!-- Sal -->
-                    <div class="py-3.5 flex items-center justify-between">
-                        <div class="flex items-start gap-3">
-                            <span class="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-slate-200 border border-slate-300"></span>
-                            <div>
-                                <h4 class="font-semibold text-stone-900 text-sm sm:text-base">Sal</h4>
-                                <p class="text-xs text-stone-400">Una pizca justa para balancear los contrastes.</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <span class="font-mono text-base sm:text-lg font-bold text-stone-950" x-text="formatearGramaje(ingredientes.sal * factorCalculado)"></span>
+                    <!-- Paso 9 -->
+                    <div class="p-4 sm:p-5 flex gap-4">
+                        <span class="font-mono text-xs font-bold text-stone-400 mt-1">09</span>
+                        <div>
+                            <span class="text-[10px] font-bold text-purple-600 uppercase tracking-wider block">Cierre</span>
+                            <h3 class="font-bold text-stone-900 text-sm mb-1">Envasado y Vacío</h3>
+                            <p class="text-xs text-stone-600 leading-relaxed">Llenar los 4 frascos en caliente a 85°C. Tapar y realizar inversión por 10 minutos para asegurar el vacío.</p>
                         </div>
                     </div>
                 </div>
             </section>
-
-            <!-- COLUMNA 2: RENDIMIENTO Y DISTRIBUCIÓN DE FRASCOS (5 cols) -->
-            <section class="lg:col-span-5 flex flex-col gap-6">
-                
-                <!-- Tarjeta de Distribución de Frascos -->
-                <div class="bg-gradient-to-br from-amber-900 to-stone-950 text-stone-100 rounded-2xl shadow-md p-6 relative overflow-hidden flex-1">
-                    <div class="absolute -right-12 -bottom-12 w-44 h-44 bg-amber-600/10 rounded-full blur-2xl"></div>
-                    
-                    <h3 class="font-bold text-lg mb-4 flex items-center gap-2 border-b border-amber-800/50 pb-3">
-                        <i data-lucide="package" class="w-5 h-5 text-amber-400"></i>
-                        Plan de Envasado Estándar
-                    </h3>
-                    
-                    <p class="text-xs text-amber-200/80 mb-6 leading-relaxed">
-                        Para el volumen de <strong class="text-white">500 ml</strong>, la distribución perfecta de la fruta y el almíbar se reparte en los siguientes recipientes herméticos:
-                    </p>
-
-                    <!-- Esquema Visual de Frascos -->
-                    <div class="space-y-5">
-                        <!-- Frasco 200 ml -->
-                        <div class="bg-white/5 border border-white/10 rounded-xl p-3.5 flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-14 border-2 border-amber-400/60 bg-amber-500/10 rounded-lg relative flex items-center justify-center">
-                                    <div class="absolute inset-x-0 bottom-0 h-4/5 bg-amber-400/20 rounded-b-md"></div>
-                                    <div class="absolute top-1 w-6 h-1 bg-stone-700 rounded-xs"></div>
-                                    <span class="text-[10px] font-mono font-bold text-amber-300 z-10">200ml</span>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-bold text-white">Frasco Principal</h4>
-                                    <p class="text-xs text-amber-200/60">Capacidad: 200 ml</p>
-                                </div>
-                            </div>
-                            <span class="font-mono text-xs bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-md font-bold">
-                                1 Unidad
-                            </span>
-                        </div>
-
-                        <!-- Frascos 100 ml -->
-                        <div class="bg-white/5 border border-white/10 rounded-xl p-3.5 flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 border-2 border-amber-400/60 bg-amber-500/10 rounded-lg relative flex items-center justify-center">
-                                    <div class="absolute inset-x-0 bottom-0 h-4/5 bg-amber-400/20 rounded-b-md"></div>
-                                    <div class="absolute top-1 w-6 h-1 bg-stone-700 rounded-xs"></div>
-                                    <span class="text-[10px] font-mono font-bold text-amber-300 z-10">100ml</span>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-bold text-white">Frascos de Degustación</h4>
-                                    <p class="text-xs text-amber-200/60">Capacidad: 100 ml c/u</p>
-                                </div>
-                            </div>
-                            <span class="font-mono text-xs bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-md font-bold">
-                                3 Unidades
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Nota de Distribución Visual -->
-                    <div class="mt-6 bg-amber-950/40 border border-amber-500/20 rounded-xl p-3">
-                        <h5 class="text-xs font-bold text-amber-300 flex items-center gap-1.5 mb-1">
-                            <i data-lucide="eye" class="w-3.5 h-3.5"></i>
-                            Regla de Oro Visual:
-                        </h5>
-                        <p class="text-[11px] text-amber-100/70 leading-relaxed">
-                            Reparte primero los cubos de mango de manera equitativa entre los frascos y luego añade el almíbar caliente. Esto garantiza una proporción visual idéntica de fruta por frasco.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Tarjeta Estética Efecto Vidrio Líquido -->
-                <div class="bg-gradient-to-br from-amber-50 to-red-50/50 border border-amber-200/60 rounded-2xl p-6 shadow-sm">
-                    <h3 class="font-bold text-stone-900 text-sm uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                        <i data-lucide="sparkles" class="w-4 h-4 text-amber-600"></i>
-                        Efecto Vidrio Líquido
-                    </h3>
-                    <p class="text-xs text-stone-600 leading-relaxed mb-4">
-                        El vinagre de arroz mantendrá el almíbar completamente cristalino. Podrás apreciar los puntos negros de la vainilla y el rojo intenso del sumac suspendidos alrededor de los cubos amarillos, logrando una estética impecable que se lucirá a través del vidrio y de etiquetas transparentes.
-                    </p>
-                    <div class="flex gap-2">
-                        <span class="w-3 h-3 rounded-full bg-amber-400 shadow-xs" title="Mango biche en su punto"></span>
-                        <span class="w-3 h-3 rounded-full bg-amber-950/90 shadow-xs" title="Semillas de vainilla naturales"></span>
-                        <span class="w-3 h-3 rounded-full bg-red-600 shadow-xs" title="Moteado de Sumac"></span>
-                        <span class="w-3 h-3 rounded-full bg-white/80 border border-stone-200 shadow-xs" title="Almíbar Cristalino"></span>
-                    </div>
-                </div>
-            </section>
+            
         </div>
 
-        <!-- SECCIÓN: FICHA TÉCNICA MAESTRA (Fases de Proceso) -->
-        <section class="bg-white rounded-2xl border border-stone-200/80 shadow-sm overflow-hidden mb-12" x-data="{ pasoActivo: null }">
-            <div class="border-b border-stone-100 bg-stone-50/70 px-6 py-5">
-                <h3 class="font-bold text-lg text-stone-900 flex items-center gap-2">
-                    <i data-lucide="list-checks" class="w-5 h-5 text-amber-500"></i>
-                    Ficha Técnica Maestra: Proceso Paso a Paso
-                </h3>
-                <p class="text-xs text-stone-500 mt-1">Sigue el flujograma interactivo. Haz clic en cada fase para expandir detalles, ver observaciones técnicas y activar temporizadores.</p>
-            </div>
-
-            <!-- Contenedor de Fases -->
-            <div class="divide-y divide-stone-100">
-                
-                <!-- Fase 1: Prep -->
-                <div class="p-6 transition-all" :class="pasoActivo === 1 ? 'bg-amber-50/20' : 'hover:bg-stone-50/30'">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer" @click="pasoActivo = (pasoActivo === 1 ? null : 1)">
-                        <div class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-stone-100 text-stone-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
-                                01
-                            </div>
-                            <div>
-                                <span class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Fase de Preparación</span>
-                                <h4 class="font-bold text-stone-900 text-base flex items-center gap-2">
-                                    Corte Preciso
-                                    <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400 transition-transform" :class="pasoActivo === 1 ? 'rotate-180' : ''"></i>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-100 text-stone-700 border border-stone-200">Cubos exactos de 0.5 cm</span>
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-100/80 text-amber-800 border border-amber-200/60">Estética geométrica uniforme</span>
-                        </div>
-                    </div>
-
-                    <!-- Detalle Expandible -->
-                    <div class="mt-4 ml-12 pl-2 text-stone-600 text-sm max-w-3xl" x-show="pasoActivo === 1" x-collapse x-transition>
-                        <p class="leading-relaxed">
-                            Pesa el mango biche ya limpio (sin cáscara ni semilla). Asegura que el corte sea limpio y de exactamente <strong class="text-stone-950 font-semibold">0.5 cm por lado</strong>. Esto garantiza un intercambio de azúcar homogéneo y que cada bocado tenga la misma textura.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Fase 2: Térmica (Blanqueado) -->
-                <div class="p-6 transition-all" :class="pasoActivo === 2 ? 'bg-amber-50/20' : 'hover:bg-stone-50/30'">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer" @click="pasoActivo = (pasoActivo === 2 ? null : 2)">
-                        <div class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
-                                02
-                            </div>
-                            <div>
-                                <span class="text-[10px] font-bold text-orange-500 uppercase tracking-wider">Fase Térmica</span>
-                                <h4 class="font-bold text-stone-900 text-base flex items-center gap-2">
-                                    Blanqueado Controlado
-                                    <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400 transition-transform" :class="pasoActivo === 2 ? 'rotate-180' : ''"></i>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-100 text-stone-700 border border-stone-200">Agua hirviendo con sal</span>
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-100/80 text-amber-800 border border-amber-200/60">Inactivar enzimas / Quitar exceso de almidón</span>
-                        </div>
-                    </div>
-
-                    <!-- Detalle Expandible con Temporizador -->
-                    <div class="mt-4 ml-12 pl-2 text-stone-600 text-sm max-w-3xl" x-show="pasoActivo === 2" x-collapse x-transition>
-                        <p class="leading-relaxed mb-4">
-                            Sumerge los cubos de mango en agua hirviendo con una pizca de sal por un tiempo preciso de <strong class="text-stone-950 font-semibold">60 a 90 segundos</strong>. Este paso detiene el deterioro enzimático y remueve el exceso de almidón superficial para mantener el almíbar limpio.
-                        </p>
-                        <!-- Temporizador Integrado -->
-                        <div class="bg-stone-50 border border-stone-200 rounded-xl p-4 flex items-center gap-4 max-w-xs">
-                            <button @click.stop="toggleTimer(90)" class="w-10 h-10 rounded-full bg-orange-600 text-white flex items-center justify-center hover:bg-orange-700 transition-colors">
-                                <i :data-lucide="timerRunning ? 'pause' : 'play'" class="w-5 h-5"></i>
-                            </button>
-                            <div>
-                                <div class="text-xs font-bold text-stone-400 uppercase tracking-wider">Temporizador Blanqueado</div>
-                                <div class="font-mono text-xl font-bold text-stone-900" x-text="formatTime(timerSeconds)">01:30</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Fase 3: Choque (Fijación) -->
-                <div class="p-6 transition-all" :class="pasoActivo === 3 ? 'bg-amber-50/20' : 'hover:bg-stone-50/30'">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer" @click="pasoActivo = (pasoActivo === 3 ? null : 3)">
-                        <div class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
-                                03
-                            </div>
-                            <div>
-                                <span class="text-[10px] font-bold text-blue-500 uppercase tracking-wider">Fase de Fijación</span>
-                                <h4 class="font-bold text-stone-900 text-base flex items-center gap-2">
-                                    Choque Térmico
-                                    <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400 transition-transform" :class="pasoActivo === 3 ? 'rotate-180' : ''"></i>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-100 text-stone-700 border border-stone-200">Agua helada y escurrido total</span>
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-100/80 text-amber-800 border border-amber-200/60">Fijar color amarillo</span>
-                        </div>
-                    </div>
-
-                    <!-- Detalle Expandible -->
-                    <div class="mt-4 ml-12 pl-2 text-stone-600 text-sm max-w-3xl" x-show="pasoActivo === 3" x-collapse x-transition>
-                        <p class="leading-relaxed">
-                            Pasa los cubos inmediatamente de la olla hirviendo a un baño de agua con hielo. Esto corta de inmediato la cocción interna, preservando la textura crocante del mango y fijando un color amarillo intenso. Escurre meticulosamente para no incorporar agua libre extra al almíbar posterior.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Fase 4: Almíbar -->
-                <div class="p-6 transition-all" :class="pasoActivo === 4 ? 'bg-amber-50/20' : 'hover:bg-stone-50/30'">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer" @click="pasoActivo = (pasoActivo === 4 ? null : 4)">
-                        <div class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
-                                04
-                            </div>
-                            <div>
-                                <span class="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Fase de Almíbar</span>
-                                <h4 class="font-bold text-stone-900 text-base flex items-center gap-2">
-                                    Base Cristalina
-                                    <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400 transition-transform" :class="pasoActivo === 4 ? 'rotate-180' : ''"></i>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-100 text-stone-700 border border-stone-200">Agua, Azúcar, Especias y Vinagre</span>
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-100/80 text-amber-800 border border-amber-200/60">Disolución / Brillo óptico</span>
-                        </div>
-                    </div>
-
-                    <!-- Detalle Expandible -->
-                    <div class="mt-4 ml-12 pl-2 text-stone-600 text-sm max-w-3xl" x-show="pasoActivo === 4" x-collapse x-transition>
-                        <p class="leading-relaxed">
-                            Mezcla en una cacerola limpia el agua inicial (<span x-text="formatearMililitros(ingredientes.agua * factorCalculado)"></span>), el azúcar blanca (<span x-text="formatearGramaje(ingredientes.azucar * factorCalculado)"></span>), las astillas de canela, los clavos, las semillas de la vainilla y la vaina vacía. Suma el vinagre de arroz (<span x-text="formatearMililitros(ingredientes.vinagre * factorCalculado)"></span>). Calienta suavemente hasta la completa disolución de los cristales de azúcar. El vinagre garantiza un medio ácido ideal que frena cualquier conato de cristalización futura.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Fase 5: Unión (Confitado) -->
-                <div class="p-6 transition-all" :class="pasoActivo === 5 ? 'bg-amber-50/20' : 'hover:bg-stone-50/30'">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer" @click="pasoActivo = (pasoActivo === 5 ? null : 5)">
-                        <div class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-yellow-100 text-yellow-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
-                                05
-                            </div>
-                            <div>
-                                <span class="text-[10px] font-bold text-yellow-600 uppercase tracking-wider">Fase de Cocción</span>
-                                <h4 class="font-bold text-stone-900 text-base flex items-center gap-2">
-                                    Confitado Osmótico
-                                    <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400 transition-transform" :class="pasoActivo === 5 ? 'rotate-180' : ''"></i>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-100 text-stone-700 border border-stone-200">Fuego mínimo</span>
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-100/80 text-amber-800 border border-amber-200/60">Intercambio de azúcares</span>
-                        </div>
-                    </div>
-
-                    <!-- Detalle Expandible -->
-                    <div class="mt-4 ml-12 pl-2 text-stone-600 text-sm max-w-3xl" x-show="pasoActivo === 5" x-collapse x-transition>
-                        <p class="leading-relaxed">
-                            Introduce los cubos de mango previamente escurridos dentro del almíbar base caliente. Lleva a fuego muy bajo para mantener una evaporación controlada. Esto permite que el azúcar penetre de forma gradual en las células de la fruta sin deshidratarla o arrugar su piel exterior.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Fase 6: Activar Sumac -->
-                <div class="p-6 transition-all" :class="pasoActivo === 6 ? 'bg-amber-50/20' : 'hover:bg-stone-50/30'">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer" @click="pasoActivo = (pasoActivo === 6 ? null : 6)">
-                        <div class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-red-100 text-red-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
-                                06
-                            </div>
-                            <div>
-                                <span class="text-[10px] font-bold text-red-600 uppercase tracking-wider">Fase de Saborización</span>
-                                <h4 class="font-bold text-stone-900 text-base flex items-center gap-2">
-                                    Bloom del Sumac (Zumaque)
-                                    <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400 transition-transform" :class="pasoActivo === 6 ? 'rotate-180' : ''"></i>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-100 text-stone-700 border border-stone-200">Bol aparte con 40ml de almíbar</span>
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-100/80 text-amber-800 border border-amber-200/60">Liberación de aceites esenciales</span>
-                        </div>
-                    </div>
-
-                    <!-- Detalle Expandible -->
-                    <div class="mt-4 ml-12 pl-2 text-stone-600 text-sm max-w-3xl" x-show="pasoActivo === 6" x-collapse x-transition>
-                        <p class="leading-relaxed">
-                            En un tazón pequeño por separado, agrega los <span class="font-semibold text-stone-900" x-text="formatearGramaje(ingredientes.sumac * factorCalculado)"></span> de sumac molido. Extrae aproximadamente <strong class="text-stone-900 font-semibold">40 ml de almíbar caliente</strong> directo de la olla y viértelo sobre el sumac. Déjalo hidratar y templar durante exactamente <strong class="text-stone-900 font-semibold">5 minutos</strong>. Este método evita grumos flotantes secos y maximiza la extracción de sus aceites esenciales y su característico color rojizo.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Fase 7: Infusión -->
-                <div class="p-6 transition-all" :class="pasoActivo === 7 ? 'bg-amber-50/20' : 'hover:bg-stone-50/30'">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer" @click="pasoActivo = (pasoActivo === 7 ? null : 7)">
-                        <div class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
-                                07
-                            </div>
-                            <div>
-                                <span class="text-[10px] font-bold text-rose-600 uppercase tracking-wider">Fase de Saborización</span>
-                                <h4 class="font-bold text-stone-900 text-base flex items-center gap-2">
-                                    Infusión de Autor
-                                    <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400 transition-transform" :class="pasoActivo === 7 ? 'rotate-180' : ''"></i>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-100 text-stone-700 border border-stone-200">Unir preparación de sumac</span>
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-100/80 text-amber-800 border border-amber-200/60">Integrar notas cítricas y moteado</span>
-                        </div>
-                    </div>
-
-                    <!-- Detalle Expandible -->
-                    <div class="mt-4 ml-12 pl-2 text-stone-600 text-sm max-w-3xl" x-show="pasoActivo === 7" x-collapse x-transition>
-                        <p class="leading-relaxed">
-                            Vierte la preparación de sumac previamente activada de vuelta a la olla principal con el mango biche en confitado. Mezcla muy suavemente con una cuchara de silicona o madera para no romper los cubos de mango. Notarás la aparición instantánea del hermoso moteado rubí suspendido en el almíbar.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Fase 8: Punto (Densidad Napa) -->
-                <div class="p-6 transition-all" :class="pasoActivo === 8 ? 'bg-amber-50/20' : 'hover:bg-stone-50/30'">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer" @click="pasoActivo = (pasoActivo === 8 ? null : 8)">
-                        <div class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
-                                08
-                            </div>
-                            <div>
-                                <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Fase de Control de Calidad</span>
-                                <h4 class="font-bold text-stone-900 text-base flex items-center gap-2">
-                                    Punto de Densidad Napa
-                                    <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400 transition-transform" :class="pasoActivo === 8 ? 'rotate-180' : ''"></i>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-100 text-stone-700 border border-stone-200">Evaporar de 5 a 8 min adicionales</span>
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-100/80 text-amber-800 border border-amber-200/60">Consistencia fluida, no mermelada</span>
-                        </div>
-                    </div>
-
-                    <!-- Detalle Expandible -->
-                    <div class="mt-4 ml-12 pl-2 text-stone-600 text-sm max-w-3xl" x-show="pasoActivo === 8" x-collapse x-transition>
-                        <p class="leading-relaxed mb-4">
-                            Cocina por <strong class="text-stone-900">5 a 8 minutos más</strong> a fuego bajo. Retira las astillas de canela, los clavos y la vaina de vainilla con ayuda de unas pinzas limpias. 
-                            <br>
-                            <span class="inline-flex items-center gap-1.5 mt-2 bg-amber-50 text-amber-900 px-3 py-1.5 rounded-lg border border-amber-200/50 text-xs">
-                                <i data-lucide="info" class="w-3.5 h-3.5 text-amber-600"></i>
-                                <strong>Prueba del plato frío:</strong> Coloca una gota de almíbar en un plato frío. Al pasar el dedo debe quedar un camino limpio (punto napa). Debe ser fluido, cristalino y deslizarse suavemente, no denso como una mermelada.
-                            </span>
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Fase 9: Cierre (Envasado) -->
-                <div class="p-6 transition-all" :class="pasoActivo === 9 ? 'bg-amber-50/20' : 'hover:bg-stone-50/30'">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer" @click="pasoActivo = (pasoActivo === 9 ? null : 9)">
-                        <div class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
-                                09
-                            </div>
-                            <div>
-                                <span class="text-[10px] font-bold text-purple-600 uppercase tracking-wider">Fase de Envasado</span>
-                                <h4 class="font-bold text-stone-900 text-base flex items-center gap-2">
-                                    Envasado y Vacío
-                                    <i data-lucide="chevron-down" class="w-4 h-4 text-stone-400 transition-transform" :class="pasoActivo === 9 ? 'rotate-180' : ''"></i>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-100 text-stone-700 border border-stone-200">Envasado en caliente a 85°C</span>
-                            <span class="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-100/80 text-amber-800 border border-amber-200/60">Garantía de conservación segura</span>
-                        </div>
-                    </div>
-
-                    <!-- Detalle Expandible -->
-                    <div class="mt-4 ml-12 pl-2 text-stone-600 text-sm max-w-3xl" x-show="pasoActivo === 9" x-collapse x-transition>
-                        <p class="leading-relaxed">
-                            Vierte la conserva caliente a una temperatura aproximada de <strong class="text-stone-950">85°C</strong> dentro de los frascos esterilizados previamente, dejando 1.5 cm libres en el cuello. Tapa firmemente y voltea los frascos de inmediato boca abajo (inversión térmica) manteniéndolos así durante <strong class="text-stone-900">10 minutos</strong> para asegurar la pasteurización de la tapa y la generación de un vacío seguro.
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Notas e Indicaciones Técnicas Finales -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Col 1 -->
-            <div class="bg-stone-100 border border-stone-200 rounded-2xl p-6">
-                <h4 class="font-bold text-stone-900 mb-2 flex items-center gap-2">
-                    <i data-lucide="alert-circle" class="w-5 h-5 text-amber-600"></i>
-                    Control de Textura
-                </h4>
-                <p class="text-xs text-stone-600 leading-relaxed">
-                    Dado el volumen reducido de 500 ml, vigila de cerca la evaporación. El ácido del vinagre actúa como protector de la pectina, pero un exceso de tiempo de cocción concentrará los azúcares y convertirá el almíbar en un gel denso. No superes los 8 minutos en el paso final.
-                </p>
-            </div>
-            
-            <!-- Col 2 -->
-            <div class="bg-amber-500/10 border border-amber-200 rounded-2xl p-6">
-                <h4 class="font-bold text-amber-950 mb-2 flex items-center gap-2">
-                    <i data-lucide="badge-check" class="w-5 h-5 text-amber-700"></i>
-                    Sello Hermético Artesanal
-                </h4>
-                <p class="text-xs text-amber-900 leading-relaxed">
-                    Si deseas conservar el producto por más de 3 meses fuera de refrigeración, realiza un proceso complementario de pasteurización sumergiendo los frascos cerrados de pie en baño maría (completamente cubiertos de agua) hirviendo durante 15 minutos exactos.
-                </p>
-            </div>
+        <!-- NOTAS FINALES DE ENVASADO -->
+        <section class="mt-8 bg-stone-900 text-stone-100 rounded-2xl p-6 border border-stone-800 relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-amber-500/10 rounded-full blur-xl"></div>
+            <h3 class="font-bold text-sm sm:text-base text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                Indicaciones de Envasado Fino
+            </h3>
+            <ul class="space-y-2 text-xs sm:text-sm text-stone-300">
+                <li class="flex items-start gap-2">
+                    <span class="text-amber-500 font-bold">•</span>
+                    <span><strong>Reparto de Sólidos:</strong> Distribuye primero los cubos de mango de forma equitativa entre tus 4 frascos (1 de 200 ml y 3 de 100 ml), luego cubre con el almíbar infundido caliente. Esto garantiza una simetría visual exacta.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-amber-500 font-bold">•</span>
+                    <span><strong>Estética del Cristal:</strong> El almíbar se mantendrá traslúcido y brillante. Los finos puntos de vainilla y el rojo intenso del sumac quedarán suspendidos de forma impecable alrededor de los cubos de mango.</span>
+                </li>
+            </ul>
         </section>
 
     </main>
 
-    <footer class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 pt-8 border-t border-stone-200 text-center text-xs text-stone-400">
-        Fórmula adaptada y balanceada para conservación segura por lotes artesanales. Control absoluto de pectinas, acidez libre y refracción óptica.
+    <footer class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-stone-200 text-center text-xs text-stone-400">
+        Ficha estandarizada para 500 ml de conserva de autor. Medidas expresadas estrictamente en g y ml para control de calidad constante.
     </footer>
 
-    <!-- Script de Configuración de Datos en AlpineJS -->
-    <script>
-        function conservaApp() {
-            return {
-                volumenBase: 500, // Volumen inicial en ml
-                
-                // Receta original exacta para 500 ml
-                ingredientes: {
-                    mango: 710,     // g
-                    azucar: 330,    // g
-                    agua: 200,      // ml
-                    vinagre: 45,    // ml
-                    vainilla: 1,    // unidades
-                    sumac: 11,      // g
-                    clavos: 8,      // unidades
-                    canela: 2.5,    // promedio de 2 a 3 unidades
-                    sal: 1          // g
-                },
-
-                // Lógica de cronómetro para pasos
-                timerSeconds: 90,
-                timerRunning: false,
-                timerInterval: null,
-
-                get factorCalculado() {
-                    return this.volumenBase / 500;
-                },
-
-                setPreset(ml) {
-                    this.volumenBase = ml;
-                },
-
-                // Métodos de formateo inteligente de decimales y unidades
-                formatearGramaje(valor) {
-                    if (valor >= 1000) {
-                        return (valor / 1000).toFixed(2) + ' kg';
-                    }
-                    return Math.round(valor) + ' g';
-                },
-
-                formatearMililitros(valor) {
-                    if (valor >= 1000) {
-                        return (valor / 1000).toFixed(2) + ' L';
-                    }
-                    return Math.round(valor) + ' ml';
-                },
-
-                formatearUnidades(valor, tag) {
-                    const entero = Math.ceil(valor);
-                    if (tag === 'u') {
-                        return entero === 1 ? '1 unidad' : `${entero} unidades`;
-                    }
-                    if (tag === 'clavos') {
-                        return `${entero} clavos`;
-                    }
-                    if (tag === 'astillas') {
-                        return `${entero} astillas grandes`;
-                    }
-                    return entero;
-                },
-
-                // Funcionalidad del cronómetro del Blanqueado (Fase 2)
-                toggleTimer(segundosIniciales) {
-                    if (this.timerRunning) {
-                        clearInterval(this.timerInterval);
-                        this.timerRunning = false;
-                    } else {
-                        this.timerRunning = true;
-                        this.timerInterval = setInterval(() => {
-                            if (this.timerSeconds > 0) {
-                                this.timerSeconds--;
-                            } else {
-                                clearInterval(this.timerInterval);
-                                this.timerRunning = false;
-                                this.timerSeconds = segundosIniciales;
-                                // Aviso al usuario cuando el temporizador termina sin alert() molesto
-                                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                                if (audioCtx) {
-                                    const osc = audioCtx.createOscillator();
-                                    osc.type = 'sine';
-                                    osc.frequency.setValueAtTime(440, audioCtx.currentTime); // Nota La
-                                    osc.connect(audioCtx.destination);
-                                    osc.start();
-                                    osc.stop(audioCtx.currentTime + 1.2);
-                                }
-                            }
-                        }, 1000);
-                    }
-                },
-
-                formatTime(segundosTotal) {
-                    const min = Math.floor(segundosTotal / 60);
-                    const seg = segundosTotal % 60;
-                    return `${min.toString().padStart(2, '0')}:${seg.toString().padStart(2, '0')}`;
-                }
-            }
-        }
-        
-        // Inicializar iconos de Lucide al cargar la página
-        window.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-        });
-    </script>
 </body>
 </html>
