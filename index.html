@@ -1,641 +1,398 @@
-<!DOCTYPE html>
+```html
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chef Dashboard: Menú Británico de Tres Tiempos</title>
-    <!-- Tailwind CSS para el diseño fluido -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter para la legibilidad suprema -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome para iconos de cocina elegantes -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f172a; /* Slate 900 */
-            color: #f1f5f9;
-        }
-        /* Custom scrollbar para mantener la estética premium dark */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1e293b;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #475569;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #64748b;
-        }
-        .active-glow {
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.35);
-            border-color: #f59e0b;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Brigada de cocina · Actividades</title>
+  <style>
+    :root{--bg:#fff;--surface:#f6f7f9;--card:rgba(255,255,255,.92);--ink:#111318;--muted:#6f737b;--line:#e6e8ec;--accent:#1769e0;--pale:#e9eef8;--shadow:0 10px 32px rgba(22,29,37,.08)}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+    .wrap{width:min(1080px,calc(100% - 32px));margin:34px auto 64px}.top{margin-bottom:24px;padding:8px 2px 22px;border-bottom:1px solid var(--line)}
+    h1,h2,h3{letter-spacing:-.025em;line-height:1.15}h1{font-size:clamp(2rem,5vw,3.7rem);font-weight:800;margin:0 0 9px}h2,p{margin:0}.subtitle{color:var(--muted);font-size:.95rem}
+    .panel,.person{background:var(--card);border:1px solid rgba(225,228,234,.9);border-radius:24px;box-shadow:var(--shadow);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.panel{padding:22px;margin-bottom:20px}
+    .controls{display:flex;align-items:end;justify-content:space-between;gap:14px;margin-bottom:22px}.controls label{width:min(360px,100%)}label span{display:block;font-size:.76rem;font-weight:700;letter-spacing:.04em;margin:0 0 7px;color:var(--muted)}
+    select,button{font:inherit}select{width:100%;padding:13px 42px 13px 14px;border:1px solid var(--line);border-radius:14px;background-color:rgba(247,248,250,.94);color:var(--ink);font-weight:650;cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease,background-color .2s ease}select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(23,105,224,.12);background:#fff}
+    .progress-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;font-size:.83rem;color:var(--muted)}.progress-head strong{color:var(--ink)}.progress-head>span:last-child{white-space:nowrap}.track{height:8px;background:var(--pale);border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:var(--accent);border-radius:inherit;transition:width .35s cubic-bezier(.2,.8,.2,1)}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}.metric{background:var(--surface);border:1px solid transparent;border-radius:18px;padding:15px;transition:background-color .2s ease,transform .2s ease}.metric:hover{background:#eef3fb;transform:translateY(-2px)}.metric-name{color:var(--muted);font-size:.78rem}.metric-value{font-size:1.65rem;font-weight:800;line-height:1.15;margin-top:3px;letter-spacing:-.03em}
+    .people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.person{padding:22px;transition:transform .25s ease,box-shadow .25s ease,background-color .25s ease}.person:hover{transform:translateY(-3px);box-shadow:0 16px 42px rgba(22,29,37,.11);background:#fff}.person-head{display:flex;justify-content:space-between;gap:12px;align-items:start;margin-bottom:17px}.person h2{font-size:1.45rem;font-weight:800}.count{background:var(--surface);color:var(--ink);border-radius:99px;padding:5px 10px;font-size:.78rem;font-weight:750;white-space:nowrap}.recipe-block{border-top:1px solid var(--line);padding-top:18px;margin-top:20px}.recipe-block h3{font-size:1.03rem;margin:0;font-weight:750}.role{font-size:.86rem;color:var(--muted);margin-top:5px}.recipe-progress{margin-top:13px}
+    .task-list{display:grid;gap:7px;margin-top:15px}.task{display:flex;gap:11px;align-items:flex-start;padding:10px 11px;border:1px solid transparent;border-radius:14px;cursor:pointer;transition:background-color .18s ease,border-color .18s ease,transform .18s ease}.task:hover{background:rgba(23,105,224,.045);border-color:rgba(23,105,224,.1)}.task:active{transform:scale(.99)}.task input{appearance:none;width:20px;height:20px;margin:2px 0 0;border:1.5px solid #aeb4bd;border-radius:7px;background:#fff;flex:0 0 auto;transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease}.task input:checked{background:var(--accent);border-color:var(--accent);box-shadow:inset 0 0 0 4px #fff}.task.done span{text-decoration:line-through;color:#9a9ea5}
+    .footer{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:22px;color:var(--muted);font-size:.82rem}.reset{border:0;background:#111318;border-radius:14px;padding:11px 15px;color:#fff;font-weight:700;cursor:pointer;box-shadow:0 8px 18px rgba(17,19,24,.16);transition:transform .18s ease,opacity .18s ease}.reset:hover{transform:translateY(-2px);opacity:.9}.reset:active{transform:translateY(0)}
+    .recipe-images{margin-top:42px;padding-top:24px;border-top:1px solid var(--line)}.recipe-images>h2{font-size:clamp(1.4rem,3vw,2rem);margin-bottom:7px}.recipe-images>.subtitle{margin-bottom:17px}.image-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.image-card{margin:0;background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s ease,box-shadow .25s ease}.image-card:hover{transform:translateY(-3px);box-shadow:0 16px 42px rgba(22,29,37,.11)}.image-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--surface)}.image-card figcaption{padding:14px 16px;font-weight:750}
+    ::selection{background:rgba(23,105,224,.2)}
+    @media(max-width:720px){.wrap{width:min(100% - 24px,560px);margin:18px auto 48px}.top{padding-top:4px;margin-bottom:18px}.top h1{font-size:2.15rem}.controls,.footer{align-items:flex-start;flex-direction:column}.controls label{width:100%}.people,.image-grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr);gap:9px}.metric{padding:13px}.metric-value{font-size:1.4rem}.panel,.person{border-radius:20px;padding:17px}.people{gap:15px}.person:hover,.image-card:hover{transform:none}.task{padding:11px 9px}.task span{font-size:.94rem}.recipe-block{margin-top:18px;padding-top:17px}.recipe-images{margin-top:34px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.fill,.metric,.person,.task,.reset,.image-card,select{transition:none}}
+  </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900">
-
-    <!-- Encabezado de la Aplicación -->
-    <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50 px-4 py-4 md:px-8">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3">
-                <div class="p-2.5 bg-amber-500/10 text-amber-500 rounded-xl border border-amber-500/20">
-                    <i class="fa-solid fa-utensils text-2xl"></i>
-                </div>
-                <div>
-                    <h1 class="text-xl md:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
-                        Chef Solo-Flow <span class="text-xs bg-amber-500/20 text-amber-400 px-2.5 py-0.5 rounded-full font-semibold border border-amber-500/30">Modo Un Solo Cocinero</span>
-                    </h1>
-                    <p class="text-xs md:text-sm text-slate-400">Menú Marítimo Británico de 3 Tiempos de Alto Rendimiento</p>
-                </div>
-            </div>
-            <!-- Estado General y Notificaciones integradas -->
-            <div class="flex items-center gap-4 bg-slate-900 p-2 rounded-xl border border-slate-800 w-full md:w-auto justify-around">
-                <div class="text-center md:text-left px-3">
-                    <span class="block text-[10px] uppercase tracking-wider text-slate-500 font-bold">Tiempo Estimado</span>
-                    <span id="global-timer" class="text-sm font-bold text-slate-200">1h 45m</span>
-                </div>
-                <div class="h-8 w-[1px] bg-slate-800"></div>
-                <div class="text-center md:text-left px-3">
-                    <span class="block text-[10px] uppercase tracking-wider text-slate-500 font-bold">Progreso Total</span>
-                    <span id="progress-text" class="text-sm font-bold text-emerald-400">0% completado</span>
-                </div>
-            </div>
-        </div>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div>
+        <h1>Brigada de cocina</h1>
+        <p class="subtitle">Actividades de las dos recetas, por persona y con progreso en vivo.</p>
+      </div>
     </header>
 
-    <!-- Contenido Principal -->
-    <main class="flex-grow max-w-7xl mx-auto w-full p-4 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        <!-- COLUMNA IZQUIERDA (8 COLS): Visualizador Canvas y Paso Activo -->
-        <section class="lg:col-span-8 flex flex-col gap-6">
-            
-            <!-- Contenedor del Mapa de Ruta (Canvas) -->
-            <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
-                <div class="flex justify-between items-center mb-3">
-                    <h2 class="text-sm font-bold tracking-wider text-slate-400 uppercase flex items-center gap-2">
-                        <i class="fa-solid fa-route text-amber-500"></i> Mapa de Ruta del Flujo de Trabajo
-                    </h2>
-                    <span class="text-xs text-slate-500 font-medium">Interactúa haciendo clic en los nodos</span>
-                </div>
-                <!-- El Canvas es responsivo mediante JS y CSS fluido -->
-                <div class="w-full overflow-x-auto rounded-xl bg-slate-900/50 p-1">
-                    <canvas id="workflow-canvas" width="800" height="150" class="block mx-auto cursor-pointer"></canvas>
-                </div>
-            </div>
+    <section class="metrics" id="metrics" aria-label="Progreso individual"></section>
 
-            <!-- Panel del Paso Activo -->
-            <div id="active-step-panel" class="bg-slate-950 border border-slate-800 rounded-2xl p-6 md:p-8 shadow-2xl transition-all duration-300 relative">
-                <!-- Efecto decorativo de fondo -->
-                <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
-                
-                <div class="relative z-10">
-                    <div class="flex flex-wrap justify-between items-start gap-4 mb-6">
-                        <div class="flex-grow">
-                            <span id="active-step-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                                Cargando...
-                            </span>
-                            <h3 id="active-step-title" class="text-2xl md:text-3xl font-extrabold text-white mt-2 leading-tight">
-                                Cargando título...
-                            </h3>
-                        </div>
-                        
-                        <!-- Panel de Temporizador Integrado -->
-                        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl flex items-center gap-4 min-w-[200px] justify-between">
-                            <div class="flex flex-col">
-                                <span class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Cronómetro</span>
-                                <span id="timer-display" class="text-2xl font-mono font-bold text-amber-400">00:00</span>
-                            </div>
-                            <div class="flex gap-2">
-                                <button id="btn-play-pause" onclick="toggleTimer()" class="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 flex items-center justify-center transition-all shadow-lg active:scale-95">
-                                    <i id="play-icon" class="fa-solid fa-play"></i>
-                                </button>
-                                <button id="btn-reset-timer" onclick="resetTimer()" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-center transition-all active:scale-95">
-                                    <i class="fa-solid fa-arrow-rotate-left"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+    <section class="panel">
+      <div class="controls">
+        <label>
+          <span>PERSONA</span>
+          <select id="person">
+            <option value="all">Toda la brigada</option>
+            <option value="santiago">Santiago</option>
+            <option value="julian">Julián</option>
+            <option value="sofia">Sofía</option>
+            <option value="angela">Ángela</option>
+          </select>
+        </label>
+      </div>
 
-                    <!-- Instrucciones Clave -->
-                    <div class="mb-6">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Instrucciones de Preparación</h4>
-                        <p id="active-step-desc" class="text-slate-300 text-sm md:text-base leading-relaxed bg-slate-900/60 p-4 rounded-xl border border-slate-800/60">
-                            Cargando descripción detallada...
-                        </p>
-                    </div>
+      <div class="progress-head">
+        <strong>Progreso general de las dos recetas</strong>
+        <span id="overallText">0 de 0 tareas · 0 %</span>
+      </div>
+      <div class="track"><div class="fill" id="overallFill"></div></div>
+    </section>
 
-                    <!-- Ingredientes Requeridos en este Paso -->
-                    <div class="mb-8">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-basket-shopping text-amber-500"></i> Ingredientes necesarios para este paso
-                        </h4>
-                        <div id="step-ingredients-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <!-- Se rellena por JavaScript -->
-                        </div>
-                    </div>
+    <section class="people" id="people" aria-live="polite"></section>
 
-                    <!-- Botones de Navegación del Paso -->
-                    <div class="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-slate-900">
-                        <button id="btn-prev" onclick="changeStep(-1)" class="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold border border-slate-800 hover:border-slate-700 transition flex items-center gap-2 disabled:opacity-30 disabled:pointer-events-none">
-                            <i class="fa-solid fa-arrow-left"></i> Anterior
-                        </button>
-                        
-                        <button id="btn-complete" onclick="markStepCompleted()" class="px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition flex items-center gap-2 shadow-lg hover:shadow-emerald-900/20 active:scale-95">
-                            <i class="fa-solid fa-check-double"></i> ¡Completado! Siguiente paso
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Guías Técnicas Rápidas -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex items-start gap-3">
-                    <i class="fa-solid fa-temperature-three-quarters text-amber-500 text-lg mt-1"></i>
-                    <div>
-                        <h5 class="font-bold text-white text-sm">Control de Temperatura (Aceite)</h5>
-                        <p class="text-xs text-slate-400 mt-1">Confitar: 90°C · Papas (2a): 170°C · Calamares: 190°C · Pescado: 180°C.</p>
-                    </div>
-                </div>
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex items-start gap-3">
-                    <i class="fa-solid fa-clock text-amber-500 text-lg mt-1"></i>
-                    <div>
-                        <h5 class="font-bold text-white text-sm">Tiempos Críticos de Fritura</h5>
-                        <p class="text-xs text-slate-400 mt-1">Calamares: 1 a 1.5 min máximo. Pescado: 4 a 5 min hasta alcanzar 55°C internos.</p>
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-        <!-- COLUMNA DERECHA (4 COLS): Checklist global e Ingredientes -->
-        <aside class="lg:col-span-4 flex flex-col gap-6">
-            
-            <div class="bg-slate-950 rounded-2xl border border-slate-800 p-6 shadow-xl flex-grow flex flex-col max-h-[700px]">
-                <div class="flex items-center justify-between mb-4 border-b border-slate-900 pb-3">
-                    <h3 class="font-bold text-white text-md uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-list-check text-amber-500"></i> Despensa e Ingredientes
-                    </h3>
-                    <button onclick="resetGlobalIngredients()" class="text-xs text-slate-400 hover:text-amber-400 transition">
-                        Limpiar todos
-                    </button>
-                </div>
-
-                <p class="text-xs text-slate-400 mb-4">Haz check a medida que tengas listos los insumos sobre la mesa.</p>
-
-                <!-- Categorías de Ingredientes -->
-                <div class="flex-grow overflow-y-auto space-y-4 pr-1" id="global-ingredients-checklist">
-                    <!-- Se carga mediante JS -->
-                </div>
-            </div>
-
-            <!-- Notificación tipo Toast interna para evitar alert() -->
-            <div id="toast-message" class="hidden bg-emerald-950 border border-emerald-500 text-emerald-200 px-4 py-3 rounded-xl flex items-center justify-between shadow-xl transition-all duration-300">
-                <span id="toast-text" class="text-xs font-semibold">¡Paso completado con éxito!</span>
-                <button onclick="hideToast()" class="text-emerald-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-        </aside>
-
-    </main>
-
-    <!-- Pie de página -->
-    <footer class="border-t border-slate-900 bg-slate-950 py-4 px-8 text-center text-xs text-slate-500">
-        <p>© 2026 British Culinary Dashboard. Basado en las recetas de Fallow y La Cocina de Calu.</p>
+    <footer class="footer">
+      <span>Los cambios se guardan automáticamente en este navegador.</span>
+      <button class="reset" id="reset" type="button">Reiniciar todas las tareas</button>
     </footer>
 
-    <!-- Lógica de control y renderizado interactivo -->
-    <script>
-        // Estructura de Datos de las Recetas e Insumos
-        const steps = [
-            {
-                id: 1,
-                badge: "Paso 1 · Preparación Inicial",
-                title: "Lavado de Papas y Manzanas",
-                desc: "Corta las papas en bastones uniformes (aprox. 4 cm de ancho). Enjuágalas repetidamente en un tazón grande con agua fría hasta que el agua salga transparente para remover el exceso de almidón. Déjalas reposar sumergidas. Paralelamente, lava, pela y pica las manzanas verdes en cubitos pequeños para el postre.",
-                time: 600, // 10 minutos
-                category: "Prep",
-                ingredients: ["Papas (Agria o Maris Piper)", "Manzanas verdes"]
-            },
-            {
-                id: 2,
-                badge: "Paso 2 · Postre (Fruta)",
-                title: "Cocinar las Manzanas para el Crumble",
-                desc: "En una olla pequeña a fuego medio, derrite un cubo generoso de mantequilla. Agrega el azúcar, las manzanas troceadas y una pizca de canela en polvo. Cocina mezclando suavemente durante unos 20 minutos hasta que estén tiernas, pero mantengan su forma. Apaga el fuego y déjalas entibiar para la base.",
-                time: 1200, // 20 minutos
-                category: "Crumble de Manzana",
-                ingredients: ["Manzanas verdes", "Mantequilla", "Azúcar", "Canela en polvo"]
-            },
-            {
-                id: 3,
-                badge: "Paso 3 · Entrada y Papas",
-                title: "Primera Cocción de las Papas (Confitado)",
-                desc: "Pon a calentar la mezcla de aceite de freír y un 30% de grasa de res en una olla honda hasta alcanzar unos cómodos 90°C. Seca las papas muy bien con papel absorbente e incorpóralas al aceite. Cocina a fuego muy bajo por 20-22 minutos. Deben quedar suaves por dentro pero firmes, sin dorarse. Sácalas con cuidado extremo y extiéndelas en una bandeja para enfriarlas en la nevera.",
-                time: 1320, // 22 minutos
-                category: "Chips",
-                ingredients: ["Papas (Agria o Maris Piper)", "Grasa de res (30%)", "Aceite para freír"]
-            },
-            {
-                id: 4,
-                badge: "Paso 4 · Pescado y Acompañamiento",
-                title: "Curado de Pescado y Salsa Tártara",
-                desc: "Limpia bien los filetes de eglefino o bacalao, quita escamas y espinas. Cúbrelos con una capa ligera de sal común en una bandeja y déjalos curar en seco 30 minutos (esto extrae la humedad y da firmeza). Aprovecha este tiempo muerto para mezclar en licuadora de inmersión el huevo, aceite neutro, mostaza Dijon, el líquido de las alcaparras y sal. Añade luego las hierbas picadas, pepinillos, alcaparras secas y el rábano picante. Guarda en la nevera.",
-                time: 1800, // 30 minutos
-                category: "Fish & Tártara",
-                ingredients: ["Filetes de bacalao o eglefino", "Sal común", "Huevo", "Aceite neutro", "Mostaza de Dijon", "Alcaparras", "Pepinillos encurtidos", "Estragón, eneldo y perejil fresco", "Mostaza con rábano picante", "Limón"]
-            },
-            {
-                id: 5,
-                badge: "Paso 5 · Postre (Horneado 1)",
-                title: "Arenado y Primera Horneada del Crumble",
-                desc: "En un bol, mezcla harina, azúcar y mantequilla fría en cubitos frotando con la punta de los dedos hasta formar un arenado con grumos. Engrasa un molde de 20x20 cm. Coloca la mitad del arenado en la base, compáctala bien con ayuda de un vaso y hornéala a 180°C por 15 minutos. Una vez lista y dorada, añade las manzanas cocidas encima y cúbrelo con el arenado suelto restante. Deja listo el molde, pero NO lo hornees por segunda vez aún.",
-                time: 900, // 15 minutos
-                category: "Crumble de Manzana",
-                ingredients: ["Harina de trigo común", "Azúcar", "Mantequilla fría", "Manzanas cocidas"]
-            },
-            {
-                id: 6,
-                badge: "Paso 6 · Acompañamiento",
-                title: "Puré de Arvejas Expreso (Mushy Peas)",
-                desc: "En una sartén pequeña, sofríe el echalote picado con mantequilla hasta que esté transparente, sin que tome color. Agrega el caldo de pollo y llévalo a hervor. En una licuadora procesa las arvejas descongeladas con las hojas de menta, sal de Maldon y un poco de este caldo hirviendo hasta lograr un puré espeso y vibrante. Pásalo por un colador y resérvalo tapado.",
-                time: 600, // 10 minutos
-                category: "Mushy Peas",
-                ingredients: ["Echalotes", "Mantequilla", "Caldo de pollo", "Arvejas congeladas", "Menta fresca", "Sal de Maldon"]
-            },
-            {
-                id: 7,
-                badge: "Paso 7 · ¡A Comer la Entrada!",
-                title: "Fritura de Calamares Sal y Pimienta",
-                desc: "Lleva la temperatura de tu aceite de freír a 190°C. Seca con mucho esmero los anillos de calamar con papel absorbente. Enharínalos en una mezcla de fécula de maíz (maicena) o harina de arroz con abundante sal marina y pimienta negra molida. Sacude en un colador para eliminar el exceso de polvo. Fríelos rápidamente por solo 60-90 segundos hasta que estén crujientes pero tiernos. ¡Sírvelos con limón y cómetelos ya!",
-                time: 90, // 1.5 minutos
-                category: "Calamares (Entrada)",
-                ingredients: ["Anillos de calamar", "Fécula de maíz", "Pimienta negra recién molida", "Sal marina", "Limón"]
-            },
-            {
-                id: 8,
-                badge: "Paso 8 · Plato Fuerte (Papas 2a)",
-                title: "Segunda Fritura de las Papas (Chips)",
-                desc: "Baja la temperatura del aceite a 170°C. Saca las papas confitadas y fríelas hasta que hagan una costra exterior rígida y rubia. Retíralas por un momento. Prepara rápidamente la mezcla de rebozado batiendo la harina, harina de arroz (o maicena extra), fécula de papa, bicarbonato, una pizca de miel, sal y la cerveza Golden Ale bien fría. Sumerge las papas brevemente en un poco de esta mezcla y vuelve a freír un minuto para un rebozado extra crujiente. Escurre y agrega sal y vinagre de malta.",
-                time: 480, // 8 minutos
-                category: "Chips",
-                ingredients: ["Papas pre-confitadas", "Harina de trigo común", "Harina de arroz", "Fécula de papa", "Bicarbonato de sodio", "Miel", "Cerveza Golden Ale", "Vinagre de malta", "Sal fina"]
-            },
-            {
-                id: 9,
-                badge: "Paso 9 · El Plato Fuerte Caliente",
-                title: "Fritura del Pescado y Emplatado",
-                desc: "Lleva el aceite a 180°C. Limpia la sal del pescado curado y sécalo. Pásalo por harina de trigo seca, sacude, y sumérgelo por completo en tu masa de cerveza fría. Introdúcelo al aceite con cuidado. Usa un dosificador de cocina o cuchara para rociar finas líneas de rebozado extra encima del pescado mientras flota. Voltea y cocina de 4 a 5 minutos (temperatura interior de 55°C). Sirve de inmediato con tus papas crujientes, salsa tártara y el puré de arvejas recalentado.",
-                time: 300, // 5 minutos
-                category: "Fish & Chips",
-                ingredients: ["Filete de pescado curado", "Harina de trigo", "Masa de rebozado de cerveza", "Salsa tártara casera", "Puré de arvejas", "Chips terminadas"]
-            },
-            {
-                id: 10,
-                badge: "Paso 10 · Postre Caliente",
-                title: "Horneado Final del Crumble",
-                desc: "Mientras te sientas a disfrutar de tu delicioso Fish and Chips, mete el molde del Apple Crumble al horno precalentado a 180°C. Hornéalo de 15 a 20 minutos hasta que la cubierta superior esté completamente dorada y burbujee por las esquinas. Al terminar de cenar, sírvelo caliente directamente en platos hondos con una bola gigante de helado de vainilla encima.",
-                time: 1200, // 20 minutos
-                category: "Crumble de Manzana",
-                ingredients: ["Crumble de manzana preparado", "Helado de vainilla"]
-            }
-        ];
+    <section class="recipe-images" aria-labelledby="recipeImagesTitle">
+      <h2 id="recipeImagesTitle">Imágenes de las recetas</h2>
+      <p class="subtitle">Referencia visual del resultado final de cada plato.</p>
 
-        let currentStepIndex = 0;
-        let timerSeconds = steps[currentStepIndex].time;
-        let timerInterval = null;
-        let isTimerRunning = false;
-        
-        // Estado de ingredientes de despensa
-        let pantryChecked = JSON.parse(localStorage.getItem('pantryChecked')) || {};
+      <div class="image-grid">
+        <figure class="image-card">
+          <!-- CAMBIA "receta-1.jpg" por el nombre o la ruta de tu primera imagen. -->
+          <img src="receta-1.jpg" alt="Presentación final de la paupiette de pescado">
+          <figcaption>Receta 1 · Paupiette de pescado</figcaption>
+        </figure>
 
-        // Canvas UI Coordinates mapping
-        const canvas = document.getElementById('workflow-canvas');
-        const ctx = canvas.getContext('2d');
+        <figure class="image-card">
+          <!-- CAMBIA "receta-2.jpg" por el nombre o la ruta de tu segunda imagen. -->
+          <img src="receta-2.jpg" alt="Presentación final de la bullabesa">
+          <figcaption>Receta 2 · Bullabesa</figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
 
-        // AUDIO - Síntesis de sonido nativa para alarmas de la cocina
-        function playAlertSound() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                
-                // Un sonido de doble campana agradable
-                const playBeep = (freq, time, duration) => {
-                    const osc = audioCtx.createOscillator();
-                    const gainNode = audioCtx.createGain();
-                    osc.connect(gainNode);
-                    gainNode.connect(audioCtx.destination);
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, time);
-                    gainNode.gain.setValueAtTime(0.3, time);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration);
-                    osc.start(time);
-                    osc.stop(time + duration);
-                };
+  <script>
+    const recipes = {
+      r1: {
+        name: 'Paupiette de pescado',
+        people: {
+          angela: {
+            name: 'Ángela',
+            role: 'Paupiette de pescado + farsa',
+            tasks: [
+              'Alistar y revisar los filetes de pescado.',
+              'Retirar espinas y acondicionar las porciones.',
+              'Procesar el salmón para elaborar la farsa.',
+              'Integrar con Sofía la crema, la clara, la sazón y la ralladura de limón.',
+              'Coordinar con Sofía el relleno de los filetes.',
+              'Armar con Sofía los rollos y cerrarlos con palillos.',
+              'Cocinar con vino blanco y mantequilla.',
+              'Verificar el punto y mantener para el servicio.'
+            ]
+          },
+          santiago: {
+            name: 'Santiago',
+            role: 'Puré con clorofila de espinaca',
+            tasks: [
+              'Pelar y cocinar las papas.',
+              'Cocer la espinaca a la inglesa.',
+              'Procesar y tamizar la espinaca.',
+              'Reducir para concentrar la clorofila.',
+              'Pasar las papas y elaborar el puré con mantequilla.',
+              'Incorporar la clorofila y rectificar sazón.',
+              'Mantener caliente al baño María.'
+            ]
+          },
+          julian: {
+            name: 'Julián',
+            role: 'Salsa normanda',
+            tasks: [
+              'Elaborar el roux.',
+              'Laminar y sudar los champiñones en mantequilla.',
+              'Desglasar con vino blanco y reducir.',
+              'Incorporar roux y fumet.',
+              'Mezclar las yemas con crema.',
+              'Incorporar la mezcla sin hervir agresivamente.',
+              'Sazonar, pasar por chino y reservar caliente.'
+            ]
+          },
+          sofia: {
+            name: 'Sofía',
+            role: 'Vegetales y zanahorias glaseadas',
+            tasks: [
+              'Preparar los bastones de zanahoria.',
+              'Glasear con mantequilla, azúcar, sal y agua.',
+              'Tornear el zucchini en medio barril.',
+              'Cocer el zucchini a la inglesa.',
+              'Cortar y cocer la cebolla larga a la inglesa.',
+              'Preparar y cocer el apio en bastones.',
+              'Saltear los vegetales con mantequilla antes del emplatado.',
+              'Al terminar los vegetales, integrar con Ángela la crema, la clara, la sazón y la ralladura de limón.',
+              'Coordinar con Ángela el relleno de los filetes.',
+              'Armar con Ángela los rollos y cerrarlos con palillos.'
+            ]
+          }
+        }
+      },
 
-                playBeep(880, audioCtx.currentTime, 0.4);
-                playBeep(1100, audioCtx.currentTime + 0.15, 0.6);
-            } catch (e) {
-                console.log("No se pudo iniciar el audio debido a restricciones del navegador.");
-            }
+      r2: {
+        name: 'Bullabesa',
+        people: {
+          angela: {
+            name: 'Ángela',
+            role: 'Mero, pargo y corvina',
+            tasks: [
+              'Verificar y acondicionar las porciones de pescado.',
+              'Sazonar con sal y pimienta.',
+              'Calentar el aceite de oliva.',
+              'Dorar cada pescado por su mejor cara.',
+              'Iniciar el pargo por el lado de la piel.',
+              'Girar y dorar los demás lados.',
+              'Añadir sopa para terminar la cocción.',
+              'Tapar y cocinar a fuego bajo de 5 a 10 minutos.',
+              'Comprobar el punto y mantener caliente.'
+            ]
+          },
+          santiago: {
+            name: 'Santiago',
+            role: 'Rouille + apoyo en crostones',
+            tasks: [
+              'Cocinar la papa de la rouille desde agua fría.',
+              'Pisar la papa cocida.',
+              'Incorporar yema, ajo y páprika.',
+              'Emulsionar con aceite de oliva y sazonar.',
+              'Reservar la rouille.',
+              'Después, cortar la baguette para apoyar a Julián.',
+              'Rociar con aceite y hornear 5 minutos a 180 °C.',
+              'Montar rouille, agregar emmental y gratinar.'
+            ]
+          },
+          julian: {
+            name: 'Julián',
+            role: 'Sopa bullabesa + coordinación de crostones',
+            tasks: [
+              'Preparar tomate, cebolla, hinojo, ajo y anís.',
+              'Dorar cabezas, recortes y espinas en aceite.',
+              'Incorporar las verduras.',
+              'Desglasar y raspar el fondo.',
+              'Agregar vino blanco y reducir.',
+              'Incorporar fumet, aromáticos y condimentos.',
+              'Cocinar 1 hora a fuego bajo.',
+              'Procesar la preparación.',
+              'Colar, sazonar y reservar caliente.',
+              'Coordinar con Santiago los crostones.'
+            ]
+          },
+          sofia: {
+            name: 'Sofía',
+            role: 'Papas nature + tomates cherry fritos',
+            tasks: [
+              'Lavar, pelar y tornear las papas.',
+              'Cocinarlas en fumet con sal y pimienta.',
+              'Cocer de 10 a 15 minutos hasta su punto.',
+              'Mantener calientes y terminar con aceite de oliva.',
+              'Lavar los tomates cherry.',
+              'Hacer un corte superficial en cruz.',
+              'Freír hasta que la piel comience a desprenderse.',
+              'Retirar y reservar calientes.',
+              'Al terminar sus preparaciones, disponer las bandejas, pinzas y utensilios para la cocción final.',
+              'Tener listos el aceite, los condimentos y la sopa caliente.'
+            ]
+          }
+        }
+      }
+    };
+
+    const key = 'brigada-cocina-v1';
+
+    let state;
+    try {
+      state = JSON.parse(localStorage.getItem(key)) || {};
+    } catch {
+      state = {};
+    }
+
+    for (const [rid, recipe] of Object.entries(recipes)) {
+      state[rid] ??= {};
+
+      for (const [pid, person] of Object.entries(recipe.people)) {
+        if (
+          !Array.isArray(state[rid][pid]) ||
+          state[rid][pid].length !== person.tasks.length
+        ) {
+          state[rid][pid] = person.tasks.map(() => false);
+        }
+      }
+    }
+
+    const $ = id => document.getElementById(id);
+    const pct = (done, total) => total ? Math.round(done / total * 100) : 0;
+    const save = () => localStorage.setItem(key, JSON.stringify(state));
+
+    function progress(recipeId, personId) {
+      const tasks = state[recipeId][personId];
+      return [tasks.filter(Boolean).length, tasks.length];
+    }
+
+    function renderMetrics() {
+      const order = ['santiago', 'julian', 'sofia', 'angela'];
+
+      $('metrics').innerHTML = order.map(pid => {
+        let done = 0;
+        let total = 0;
+
+        for (const rid of Object.keys(recipes)) {
+          const current = progress(rid, pid);
+          done += current[0];
+          total += current[1];
         }
 
-        window.onload = function() {
-            renderPantryChecklist();
-            updateStepDisplay();
-            setupCanvasResize();
-            drawWorkflowMap();
+        return `
+          <div class="metric">
+            <div class="metric-name">${recipes.r1.people[pid].name}</div>
+            <div class="metric-value">${pct(done, total)} %</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function render() {
+      const filter = $('person').value;
+      const order = ['santiago', 'julian', 'sofia', 'angela'];
+
+      $('people').innerHTML = '';
+
+      for (const pid of order) {
+        if (filter !== 'all' && filter !== pid) continue;
+
+        let personDone = 0;
+        let personTotal = 0;
+
+        for (const rid of Object.keys(recipes)) {
+          const current = progress(rid, pid);
+          personDone += current[0];
+          personTotal += current[1];
         }
 
-        function renderPantryChecklist() {
-            const container = document.getElementById('global-ingredients-checklist');
-            container.innerHTML = '';
+        const card = document.createElement('article');
+        card.className = 'person';
 
-            // Clasificar ingredientes por sección
-            const categories = {
-                "Pescado & Papas": ["Papas (Agria o Maris Piper)", "Grasa de res (30%)", "Aceite para freír", "Filetes de bacalao o eglefino", "Harina de trigo común", "Harina de arroz", "Fécula de papa", "Bicarbonato de sodio", "Miel", "Cerveza Golden Ale", "Vinagre de malta", "Sal de Maldon", "Sal común"],
-                "Calamares (Entrada)": ["Anillos de calamar", "Fécula de maíz", "Pimienta negra recién molida", "Sal marina", "Limón"],
-                "Salsas & Acompañamientos": ["Huevo", "Aceite neutro", "Mostaza de Dijon", "Alcaparras", "Pepinillos encurtidos", "Estragón, eneldo y perejil fresco", "Mostaza con rábano picante", "Echalotes", "Caldo de pollo", "Arvejas congeladas", "Menta fresca"],
-                "Postre": ["Manzanas verdes", "Mantequilla", "Azúcar", "Canela en polvo", "Helado de vainilla"]
-            };
+        card.innerHTML = `
+          <div class="person-head">
+            <h2>${recipes.r1.people[pid].name}</h2>
+            <span class="count">${personDone}/${personTotal}</span>
+          </div>
 
-            for (const [catName, items] of Object.entries(categories)) {
-                const catDiv = document.createElement('div');
-                catDiv.className = 'border-b border-slate-900 pb-3 last:border-0';
-                catDiv.innerHTML = `<h4 class="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wide flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> ${catName}
-                </h4>`;
+          <div class="progress-head">
+            <span>Progreso en las dos recetas</span>
+            <span>${pct(personDone, personTotal)} %</span>
+          </div>
 
-                const ul = document.createElement('ul');
-                ul.className = 'space-y-1.5 pl-1';
+          <div class="track">
+            <div class="fill" style="width:${pct(personDone, personTotal)}%"></div>
+          </div>
+        `;
 
-                items.forEach((item, index) => {
-                    const cleanItemKey = item.toLowerCase().replace(/[^a-z0-9]/g, '');
-                    const isChecked = pantryChecked[cleanItemKey] ? 'checked' : '';
-                    
-                    const li = document.createElement('li');
-                    li.className = 'flex items-center gap-2 text-xs md:text-sm text-slate-300';
-                    li.innerHTML = `
-                        <input type="checkbox" id="check-${cleanItemKey}" ${isChecked} 
-                            onclick="togglePantryItem('${cleanItemKey}')" 
-                            class="rounded border-slate-700 bg-slate-900 text-amber-500 focus:ring-amber-500 h-4.5 w-4.5 cursor-pointer">
-                        <label for="check-${cleanItemKey}" class="cursor-pointer select-none ${isChecked ? 'line-through text-slate-500' : ''}">${item}</label>
-                    `;
-                    ul.appendChild(li);
-                });
+        for (const [rid, recipe] of Object.entries(recipes)) {
+          const person = recipe.people[pid];
+          const [done, total] = progress(rid, pid);
 
-                catDiv.appendChild(ul);
-                container.appendChild(catDiv);
-            }
-        }
+          const block = document.createElement('section');
+          block.className = 'recipe-block';
 
-        function togglePantryItem(key) {
-            pantryChecked[key] = !pantryChecked[key];
-            localStorage.setItem('pantryChecked', JSON.stringify(pantryChecked));
-            renderPantryChecklist();
-            updateStepDisplay(); // Actualizar indicadores en el paso activo
-        }
+          block.innerHTML = `
+            <h3>Receta ${rid === 'r1' ? '1' : '2'} · ${recipe.name}</h3>
+            <p class="role">${person.role}</p>
 
-        function resetGlobalIngredients() {
-            pantryChecked = {};
-            localStorage.setItem('pantryChecked', JSON.stringify(pantryChecked));
-            renderPantryChecklist();
-            updateStepDisplay();
-        }
+            <div class="recipe-progress">
+              <div class="progress-head">
+                <span>Progreso</span>
+                <span>${done}/${total} · ${pct(done, total)} %</span>
+              </div>
 
-        function updateStepDisplay() {
-            const step = steps[currentStepIndex];
+              <div class="track">
+                <div class="fill" style="width:${pct(done, total)}%"></div>
+              </div>
+            </div>
 
-            // Badge, título y descripción
-            document.getElementById('active-step-badge').textContent = step.badge;
-            document.getElementById('active-step-title').textContent = step.title;
-            document.getElementById('active-step-desc').textContent = step.desc;
+            <div class="task-list"></div>
+          `;
 
-            // Renderizar la minilista de ingredientes requeridos para este paso en particular
-            const ingredientsContainer = document.getElementById('step-ingredients-list');
-            ingredientsContainer.innerHTML = '';
+          const list = block.querySelector('.task-list');
 
-            step.ingredients.forEach(ing => {
-                const cleanKey = ing.toLowerCase().replace(/[^a-z0-9]/g, '');
-                const hasIngredient = pantryChecked[cleanKey];
+          person.tasks.forEach((task, index) => {
+            const row = document.createElement('label');
 
-                const div = document.createElement('div');
-                div.className = `p-3 rounded-xl border flex items-center gap-3 transition-all ${
-                    hasIngredient 
-                    ? 'bg-slate-900/40 border-slate-800/50 text-slate-400' 
-                    : 'bg-amber-950/20 border-amber-500/20 text-slate-200 active-glow'
-                }`;
-                
-                div.innerHTML = `
-                    <div class="flex items-center justify-center w-5 h-5 rounded-full ${
-                        hasIngredient ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-amber-500/10 text-amber-500 border border-amber-500/30'
-                    }">
-                        <i class="fa-solid ${hasIngredient ? 'fa-check text-[10px]' : 'fa-circle text-[6px]'}"></i>
-                    </div>
-                    <span class="text-xs md:text-sm font-semibold truncate ${hasIngredient ? 'line-through' : ''}">${ing}</span>
-                `;
-                ingredientsContainer.appendChild(div);
+            row.className = 'task' + (state[rid][pid][index] ? ' done' : '');
+
+            row.innerHTML = `
+              <input type="checkbox" ${state[rid][pid][index] ? 'checked' : ''}>
+              <span>${task}</span>
+            `;
+
+            row.querySelector('input').addEventListener('change', event => {
+              state[rid][pid][index] = event.target.checked;
+              save();
+              render();
             });
 
-            // Actualizar cronómetro del paso
-            resetTimer();
+            list.appendChild(row);
+          });
 
-            // Deshabilitar/habilitar botones de navegación
-            document.getElementById('btn-prev').disabled = (currentStepIndex === 0);
-            
-            // Actualizar textos globales de progreso
-            const progressPct = Math.round((currentStepIndex / steps.length) * 100);
-            document.getElementById('progress-text').textContent = `${progressPct}% completado`;
-            
-            // Dibujar Canvas Workflow para refrescar estado
-            drawWorkflowMap();
+          card.appendChild(block);
         }
 
-        function toggleTimer() {
-            const playIcon = document.getElementById('play-icon');
-            if (isTimerRunning) {
-                clearInterval(timerInterval);
-                isTimerRunning = false;
-                playIcon.className = 'fa-solid fa-play';
-            } else {
-                isTimerRunning = true;
-                playIcon.className = 'fa-solid fa-pause';
-                timerInterval = setInterval(() => {
-                    if (timerSeconds > 0) {
-                        timerSeconds--;
-                        updateTimerDisplay();
-                    } else {
-                        clearInterval(timerInterval);
-                        isTimerRunning = false;
-                        playIcon.className = 'fa-solid fa-play';
-                        playAlertSound();
-                        showToast(`¡Tiempo terminado en el paso actual!`);
-                    }
-                }, 1000);
-            }
+        $('people').appendChild(card);
+      }
+
+      let done = 0;
+      let total = 0;
+
+      for (const rid of Object.keys(recipes)) {
+        for (const pid of order) {
+          const current = progress(rid, pid);
+          done += current[0];
+          total += current[1];
+        }
+      }
+
+      $('overallText').textContent = `${done} de ${total} tareas · ${pct(done, total)} %`;
+      $('overallFill').style.width = pct(done, total) + '%';
+
+      renderMetrics();
+    }
+
+    $('person').addEventListener('change', render);
+
+    $('reset').addEventListener('click', () => {
+      if (confirm('¿Reiniciar todas las tareas de las dos recetas?')) {
+        for (const rid of Object.keys(state)) {
+          for (const pid of Object.keys(state[rid])) {
+            state[rid][pid] = state[rid][pid].map(() => false);
+          }
         }
 
-        function resetTimer() {
-            clearInterval(timerInterval);
-            isTimerRunning = false;
-            document.getElementById('play-icon').className = 'fa-solid fa-play';
-            timerSeconds = steps[currentStepIndex].time;
-            updateTimerDisplay();
-        }
+        save();
+        render();
+      }
+    });
 
-        function updateTimerDisplay() {
-            const mins = Math.floor(timerSeconds / 60);
-            const secs = timerSeconds % 60;
-            document.getElementById('timer-display').textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        }
-
-        function changeStep(direction) {
-            const newIndex = currentStepIndex + direction;
-            if (newIndex >= 0 && newIndex < steps.length) {
-                currentStepIndex = newIndex;
-                updateStepDisplay();
-            }
-        }
-
-        function markStepCompleted() {
-            showToast(`¡Paso ${currentStepIndex + 1} completado con éxito!`);
-            playAlertSound();
-            if (currentStepIndex < steps.length - 1) {
-                currentStepIndex++;
-                updateStepDisplay();
-            } else {
-                showToast("¡Felicidades! Has completado todo el menú.");
-            }
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast-message');
-            const toastText = document.getElementById('toast-text');
-            toastText.textContent = message;
-            toast.classList.remove('hidden');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 6000);
-        }
-
-        function hideToast() {
-            document.getElementById('toast-message').classList.add('hidden');
-        }
-
-        function drawWorkflowMap() {
-            if (!canvas.getContext) return;
-            
-            // Limpiar canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            const totalSteps = steps.length;
-            const padding = 40;
-            const lineY = canvas.height / 2;
-            const spacing = (canvas.width - padding * 2) / (totalSteps - 1);
-            
-            // Dibujar la línea de tiempo principal de fondo
-            ctx.beginPath();
-            ctx.moveTo(padding, lineY);
-            ctx.lineTo(canvas.width - padding, lineY);
-            ctx.strokeStyle = '#334155'; // Slate 700
-            ctx.lineWidth = 4;
-            ctx.stroke();
-
-            // Dibujar la línea de progreso completado
-            if (currentStepIndex > 0) {
-                ctx.beginPath();
-                ctx.moveTo(padding, lineY);
-                const progressX = padding + currentStepIndex * spacing;
-                ctx.lineTo(progressX, lineY);
-                ctx.strokeStyle = '#10b981'; // Emerald 500
-                ctx.lineWidth = 4;
-                ctx.stroke();
-            }
-
-            // Dibujar los nodos de los pasos
-            for (let i = 0; i < totalSteps; i++) {
-                const nodeX = padding + i * spacing;
-                const nodeY = lineY;
-                const isCurrent = (i === currentStepIndex);
-                const isCompleted = (i < currentStepIndex);
-                
-                // Efecto de brillo para el paso activo
-                if (isCurrent) {
-                    ctx.beginPath();
-                    ctx.arc(nodeX, nodeY, 18, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(245, 158, 11, 0.15)';
-                    ctx.fill();
-                    
-                    ctx.beginPath();
-                    ctx.arc(nodeX, nodeY, 12, 0, Math.PI * 2);
-                    ctx.fillStyle = '#f59e0b'; // Amber 500
-                    ctx.fill();
-                } else if (isCompleted) {
-                    ctx.beginPath();
-                    ctx.arc(nodeX, nodeY, 9, 0, Math.PI * 2);
-                    ctx.fillStyle = '#10b981'; // Emerald 500
-                    ctx.fill();
-                } else {
-                    ctx.beginPath();
-                    ctx.arc(nodeX, nodeY, 7, 0, Math.PI * 2);
-                    ctx.fillStyle = '#475569'; // Slate 600
-                    ctx.fill();
-                }
-                
-                // Añadir el número de paso dentro de los nodos más grandes
-                if (isCurrent) {
-                    ctx.fillStyle = '#0f172a';
-                    ctx.font = 'bold 10px Inter';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText((i+1).toString(), nodeX, nodeY);
-                }
-
-                // Etiquetas de nombres cortos debajo del nodo
-                ctx.fillStyle = isCurrent ? '#f59e0b' : (isCompleted ? '#10b981' : '#94a3b8');
-                ctx.font = isCurrent ? 'bold 10px Inter' : '500 9px Inter';
-                ctx.textAlign = 'center';
-                
-                // Texto de la categoría
-                ctx.fillText(steps[i].category, nodeX, nodeY + 30);
-            }
-        }
-
-        // Permitir que el usuario haga clic directamente en los nodos del canvas para cambiar de paso
-        canvas.addEventListener('click', function(event) {
-            const rect = canvas.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
-            
-            const totalSteps = steps.length;
-            const padding = 40;
-            const spacing = (canvas.width - padding * 2) / (totalSteps - 1);
-            const lineY = canvas.height / 2;
-
-            for (let i = 0; i < totalSteps; i++) {
-                const nodeX = padding + i * spacing;
-                // Verificar proximidad con el puntero
-                const distance = Math.sqrt((x - nodeX) ** 2 + (y - lineY) ** 2);
-                if (distance < 20) {
-                    currentStepIndex = i;
-                    updateStepDisplay();
-                    break;
-                }
-            }
-        });
-
-        // Asegurar que el canvas funcione en pantallas pequeñas escalando la resolución
-        function setupCanvasResize() {
-            const resize = () => {
-                const width = canvas.parentElement.clientWidth;
-                canvas.width = Math.max(width, 400); // Mínimo de 400px para deslizar en móviles
-                drawWorkflowMap();
-            };
-            window.addEventListener('resize', resize);
-            resize();
-        }
-    </script>
+    render();
+  </script>
 </body>
 </html>
+```
